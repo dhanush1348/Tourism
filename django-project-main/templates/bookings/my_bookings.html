@@ -1,0 +1,552 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Bookings - Tours & Travels{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/payment.css' %}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    .booking-card {
+        transition: transform 0.2s;
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    .booking-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .booking-status {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .status-confirmed {
+        background-color: #d1e7dd;
+        color: #0f5132;
+    }
+    
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-cancelled {
+        background-color: #f8d7da;
+        color: #842029;
+    }
+    
+    .status-completed {
+        background-color: #cfe2ff;
+        color: #084298;
+    }
+    
+    .booking-image {
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .booking-details {
+        padding: 1.5rem;
+    }
+    
+    .booking-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .booking-info {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+    
+    .booking-info i {
+        width: 1.25rem;
+        text-align: center;
+    }
+    
+    .booking-price {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #0d6efd;
+    }
+    
+    .no-bookings {
+        text-align: center;
+        padding: 3rem 0;
+    }
+    
+    .no-bookings i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+    
+    .booking-actions {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #dee2e6;
+    }
+    
+    .booking-rating {
+        color: #ffc107;
+        margin-bottom: 0.5rem;
+    }
+    
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .progress-steps::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #e9ecef;
+        z-index: 1;
+    }
+    
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        border: 3px solid white;
+    }
+    
+    .step-label {
+        font-size: 0.75rem;
+        color: #6c757d;
+        font-weight: 500;
+        text-align: center;
+    }
+    
+    .step.active .step-number {
+        background-color: #0d6efd;
+        color: white;
+    }
+    
+    .step.active .step-label {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+    
+    .step.completed .step-number {
+        background-color: #198754;
+        color: white;
+    }
+    
+    .step.completed .step-label {
+        color: #198754;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">My Bookings</h1>
+        <a href="{% url 'bookings:tour_list' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Book New Tour
+        </a>
+    </div>
+
+    <!-- Sample Bookings Data (would normally come from backend) -->
+    <script id="bookings-data" type="application/json">
+    {
+        "bookings": [
+            {
+                "id": 1,
+                "tour": {
+                    "id": 1,
+                    "name": "Italian Adventure",
+                    "image": "{% static 'img/tour-italy.jpg' %}",
+                    "destination": "Italy",
+                    "price": 2499,
+                    "duration_days": 10,
+                    "category": "cultural",
+                    "rating": 4.5,
+                    "review_count": 24,
+                    "description": "Experience the art, history, and cuisine of Italy's most iconic cities on this 10-day cultural journey."
+                },
+                "tour_date": "2023-11-15",
+                "number_of_people": 2,
+                "total_amount": 5497.80,
+                "status": "confirmed",
+                "payment_status": "paid",
+                "booking_date": "2023-09-10"
+            },
+            {
+                "id": 2,
+                "tour": {
+                    "id": 2,
+                    "name": "Japanese Cultural Tour",
+                    "image": "{% static 'img/tour-japan.jpg' %}",
+                    "destination": "Japan",
+                    "price": 3199,
+                    "duration_days": 12,
+                    "category": "cultural",
+                    "rating": 5,
+                    "review_count": 32,
+                    "description": "Immerse yourself in Japan's rich traditions from ancient temples to modern cities on this 12-day exploration."
+                },
+                "tour_date": "2024-02-05",
+                "number_of_people": 1,
+                "total_amount": 3518.90,
+                "status": "pending",
+                "payment_status": "partial",
+                "booking_date": "2023-10-15"
+            },
+            {
+                "id": 3,
+                "tour": {
+                    "id": 3,
+                    "name": "Bali Retreat",
+                    "image": "{% static 'img/tour-bali.jpg' %}",
+                    "destination": "Bali, Indonesia",
+                    "price": 1899,
+                    "duration_days": 8,
+                    "category": "luxury",
+                    "rating": 4,
+                    "review_count": 18,
+                    "description": "Relax and rejuvenate with this 8-day luxury retreat featuring private villas, spa treatments, and cultural experiences."
+                },
+                "tour_date": "2023-12-20",
+                "number_of_people": 4,
+                "total_amount": 8355.60,
+                "status": "completed",
+                "payment_status": "paid",
+                "booking_date": "2023-08-05"
+            },
+            {
+                "id": 4,
+                "tour": {
+                    "id": 4,
+                    "name": "Peru Expedition",
+                    "image": "{% static 'img/tour-peru.jpg' %}",
+                    "destination": "Peru",
+                    "price": 2799,
+                    "duration_days": 14,
+                    "category": "adventure",
+                    "rating": 5,
+                    "review_count": 27,
+                    "description": "Trek through the Andes and explore ancient Incan ruins on this 14-day adventure tour."
+                },
+                "tour_date": "2024-04-10",
+                "number_of_people": 3,
+                "total_amount": 9236.70,
+                "status": "confirmed",
+                "payment_status": "paid",
+                "booking_date": "2023-11-20"
+            },
+            {
+                "id": 5,
+                "tour": {
+                    "id": 5,
+                    "name": "African Safari",
+                    "image": "{% static 'img/tour-safari.jpg' %}",
+                    "destination": "South Africa",
+                    "price": 3499,
+                    "duration_days": 7,
+                    "category": "adventure",
+                    "rating": 4.5,
+                    "review_count": 21,
+                    "description": "Experience the thrill of spotting the Big Five on this 7-day luxury safari with expert guides."
+                },
+                "tour_date": "2023-10-05",
+                "number_of_people": 2,
+                "total_amount": 7697.80,
+                "status": "cancelled",
+                "payment_status": "refunded",
+                "booking_date": "2023-07-15"
+            }
+        ]
+    }
+    </script>
+
+    <div class="row g-4" id="bookings-container">
+        <!-- Bookings will be loaded here by JavaScript -->
+    </div>
+
+    <div id="no-bookings" class="no-bookings" style="display: none;">
+        <i class="fas fa-suitcase"></i>
+        <h3 class="h4 mb-3">No Bookings Yet</h3>
+        <p class="text-muted mb-4">You haven't made any bookings yet. Start exploring our amazing tours!</p>
+        <a href="{% url 'bookings:tour_list' %}" class="btn btn-primary">
+            <i class="fas fa-search me-2"></i>Browse Tours
+        </a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get bookings data from JSON
+    const bookingsData = JSON.parse(document.getElementById('bookings-data').textContent);
+    const bookings = bookingsData.bookings;
+    const bookingsContainer = document.getElementById('bookings-container');
+    const noBookings = document.getElementById('no-bookings');
+
+    // Render bookings
+    function renderBookings() {
+        bookingsContainer.innerHTML = '';
+        
+        if (bookings.length === 0) {
+            noBookings.style.display = 'block';
+            return;
+        }
+        
+        noBookings.style.display = 'none';
+        
+        bookings.forEach(booking => {
+            const bookingCard = createBookingCard(booking);
+            bookingsContainer.appendChild(bookingCard);
+        });
+    }
+
+    // Create a booking card
+    function createBookingCard(booking) {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4';
+        
+        const card = document.createElement('div');
+        card.className = 'booking-card card h-100';
+        
+        // Card image with status badge
+        const imageDiv = document.createElement('div');
+        imageDiv.className = 'position-relative';
+        
+        const img = document.createElement('img');
+        img.src = booking.tour.image;
+        img.className = 'booking-image card-img-top';
+        img.alt = booking.tour.name;
+        imageDiv.appendChild(img);
+        
+        const statusBadge = document.createElement('span');
+        statusBadge.className = `booking-status status-${booking.status}`;
+        statusBadge.textContent = formatStatus(booking.status);
+        imageDiv.appendChild(statusBadge);
+        
+        card.appendChild(imageDiv);
+        
+        // Card body
+        const cardBody = document.createElement('div');
+        cardBody.className = 'booking-details';
+        
+        // Title
+        const title = document.createElement('h5');
+        title.className = 'booking-title';
+        title.textContent = booking.tour.name;
+        cardBody.appendChild(title);
+        
+        // Rating
+        const ratingDiv = document.createElement('div');
+        ratingDiv.className = 'booking-rating';
+        
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('i');
+            star.className = i <= booking.tour.rating ? 'fas fa-star' : 
+                             (i - 0.5 <= booking.tour.rating ? 'fas fa-star-half-alt' : 'far fa-star');
+            ratingDiv.appendChild(star);
+        }
+        
+        const reviewCount = document.createElement('span');
+        reviewCount.className = 'text-muted ms-2 small';
+        reviewCount.textContent = `(${booking.tour.review_count})`;
+        ratingDiv.appendChild(reviewCount);
+        
+        cardBody.appendChild(ratingDiv);
+        
+        // Booking info
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'booking-info mb-3';
+        
+        // Tour date
+        const dateDiv = document.createElement('div');
+        dateDiv.className = 'mb-2';
+        
+        const dateIcon = document.createElement('i');
+        dateIcon.className = 'fas fa-calendar-alt me-2';
+        dateDiv.appendChild(dateIcon);
+        
+        const formattedDate = new Date(booking.tour_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        dateDiv.appendChild(document.createTextNode(formattedDate));
+        infoDiv.appendChild(dateDiv);
+        
+        // Number of people
+        const peopleDiv = document.createElement('div');
+        peopleDiv.className = 'mb-2';
+        
+        const peopleIcon = document.createElement('i');
+        peopleIcon.className = 'fas fa-users me-2';
+        peopleDiv.appendChild(peopleIcon);
+        
+        peopleDiv.appendChild(document.createTextNode(
+            `${booking.number_of_people} Traveler${booking.number_of_people > 1 ? 's' : ''}`
+        ));
+        infoDiv.appendChild(peopleDiv);
+        
+        // Destination
+        const locationDiv = document.createElement('div');
+        
+        const locationIcon = document.createElement('i');
+        locationIcon.className = 'fas fa-map-marker-alt me-2';
+        locationDiv.appendChild(locationIcon);
+        
+        locationDiv.appendChild(document.createTextNode(booking.tour.destination));
+        infoDiv.appendChild(locationDiv);
+        
+        cardBody.appendChild(infoDiv);
+        
+        // Price and actions
+        const footerDiv = document.createElement('div');
+        footerDiv.className = 'd-flex justify-content-between align-items-center';
+        
+        // Price
+        const priceDiv = document.createElement('div');
+        priceDiv.className = 'booking-price';
+        priceDiv.textContent = `$${booking.total_amount.toFixed(2)}`;
+        footerDiv.appendChild(priceDiv);
+        
+        cardBody.appendChild(footerDiv);
+        
+        // Actions
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'booking-actions';
+        
+        // View details button
+        const detailsBtn = document.createElement('a');
+        detailsBtn.href = `/bookings/booking/${booking.id}/`;
+        detailsBtn.className = 'btn btn-outline-primary btn-sm';
+        
+        const detailsIcon = document.createElement('i');
+        detailsIcon.className = 'fas fa-eye me-1';
+        detailsBtn.appendChild(detailsIcon);
+        detailsBtn.appendChild(document.createTextNode('View Details'));
+        actionsDiv.appendChild(detailsBtn);
+        
+        // Pay now button (if pending)
+        if (booking.status === 'pending') {
+            const payBtn = document.createElement('a');
+            payBtn.href = `/bookings/payment/${booking.id}/`;
+            payBtn.className = 'btn btn-primary btn-sm ms-2';
+            
+            const payIcon = document.createElement('i');
+            payIcon.className = 'fas fa-credit-card me-1';
+            payBtn.appendChild(payIcon);
+            payBtn.appendChild(document.createTextNode('Pay Now'));
+            actionsDiv.appendChild(payBtn);
+        }
+        
+        // Cancel button (if not completed/cancelled)
+        if (booking.status !== 'completed' && booking.status !== 'cancelled') {
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'btn btn-outline-danger btn-sm ms-2';
+            cancelBtn.dataset.bsToggle = 'modal';
+            cancelBtn.dataset.bsTarget = '#cancelModal';
+            cancelBtn.dataset.bookingId = booking.id;
+            
+            const cancelIcon = document.createElement('i');
+            cancelIcon.className = 'fas fa-times me-1';
+            cancelBtn.appendChild(cancelIcon);
+            cancelBtn.appendChild(document.createTextNode('Cancel'));
+            actionsDiv.appendChild(cancelBtn);
+        }
+        
+        cardBody.appendChild(actionsDiv);
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        
+        return col;
+    }
+    
+    // Format status for display
+    function formatStatus(status) {
+        const statusMap = {
+            'confirmed': 'Confirmed',
+            'pending': 'Pending',
+            'cancelled': 'Cancelled',
+            'completed': 'Completed'
+        };
+        return statusMap[status] || status;
+    }
+    
+    // Initial render
+    renderBookings();
+    
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filter = this.dataset.filter;
+            let filteredBookings = [...bookingsData.bookings];
+            
+            if (filter !== 'all') {
+                filteredBookings = filteredBookings.filter(booking => booking.status === filter);
+            }
+            
+            bookings = filteredBookings;
+            renderBookings();
+        });
+    });
+});
+</script>
+
+<!-- Cancel Booking Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Cancel Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this booking?</p>
+                <p class="text-muted small">Cancellation fees may apply depending on your booking terms.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger">Confirm Cancellation</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

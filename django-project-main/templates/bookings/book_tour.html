@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Book {{ tour.name }} - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="mb-4">Book {{ tour.name }}</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Tour Details</h5>
+                    <p class="card-text">{{ tour.description }}</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Destination:</strong> {{ tour.destination.name }}</li>
+                        <li><strong>Duration:</strong> {{ tour.duration_days }} days</li>
+                        <li><strong>Price per person:</strong> ${{ tour.price }}</li>
+                        <li><strong>Group size:</strong> {{ tour.group_size_min }} - {{ tour.group_size_max }} people</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <form method="post" class="booking-form">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary mt-3">Proceed to Payment</button>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Booking Summary</h5>
+                    <div class="booking-summary">
+                        <p><strong>Tour:</strong> {{ tour.name }}</p>
+                        <p><strong>Price per person:</strong> ${{ tour.price }}</p>
+                        <p><strong>Total price:</strong> <span id="total-price">${{ tour.price }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const numPeopleInput = document.querySelector('#id_num_people');
+        const totalPriceSpan = document.querySelector('#total-price');
+        const pricePerPerson = {{ tour.price }};
+        
+        numPeopleInput.addEventListener('change', function() {
+            const totalPrice = pricePerPerson * this.value;
+            totalPriceSpan.textContent = '$' + totalPrice.toFixed(2);
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

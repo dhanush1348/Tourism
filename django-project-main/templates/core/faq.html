@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Frequently Asked Questions - Tours & Travels{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 bg-dark text-white position-relative">
+  <div class="background-overlay" style="background-image: url('{% static 'img/faq-hero-bg.jpg' %}');"></div>
+  <div class="container position-relative py-6 z-index-1 text-center">
+    <h1 class="display-4 fw-bold mb-4">Frequently Asked Questions</h1>
+    <p class="lead mb-5">Find answers to common questions about our tours and services</p>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <!-- Booking Questions -->
+        <div class="mb-5">
+          <h2 class="h3 mb-4">Booking & Reservations</h2>
+          <div class="accordion" id="bookingAccordion">
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#booking1">
+                  How do I book a tour?
+                </button>
+              </h3>
+              <div id="booking1" class="accordion-collapse collapse show" data-bs-parent="#bookingAccordion">
+                <div class="accordion-body">
+                  <p>Booking a tour is easy! Simply browse our tour listings, select your desired tour, choose your preferred dates, and follow the booking process. You'll need to provide your personal details and payment information to complete the reservation.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#booking2">
+                  What payment methods do you accept?
+                </button>
+              </h3>
+              <div id="booking2" class="accordion-collapse collapse" data-bs-parent="#bookingAccordion">
+                <div class="accordion-body">
+                  <p>We accept all major credit cards (Visa, MasterCard, American Express) and PayPal. For some tours, we also accept bank transfers. Payment details will be provided during the booking process.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#booking3">
+                  Can I cancel or modify my booking?
+                </button>
+              </h3>
+              <div id="booking3" class="accordion-collapse collapse" data-bs-parent="#bookingAccordion">
+                <div class="accordion-body">
+                  <p>Yes, you can cancel or modify your booking, but please note that cancellation policies vary by tour. Most tours allow free cancellation up to 30 days before departure. For specific details, please refer to the tour's cancellation policy or contact our customer service.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tour Questions -->
+        <div class="mb-5">
+          <h2 class="h3 mb-4">Tour Information</h2>
+          <div class="accordion" id="tourAccordion">
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tour1">
+                  What's included in the tour price?
+                </button>
+              </h3>
+              <div id="tour1" class="accordion-collapse collapse show" data-bs-parent="#tourAccordion">
+                <div class="accordion-body">
+                  <p>Tour inclusions vary by package, but typically include accommodation, transportation, guided activities, and some meals. Specific inclusions are listed in each tour's description. Please review the details carefully before booking.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tour2">
+                  What should I pack for the tour?
+                </button>
+              </h3>
+              <div id="tour2" class="accordion-collapse collapse" data-bs-parent="#tourAccordion">
+                <div class="accordion-body">
+                  <p>We provide a detailed packing list for each tour in your confirmation email. Generally, we recommend comfortable clothing, appropriate footwear, weather-appropriate gear, and any necessary personal items. Don't forget your travel documents and medications!</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tour3">
+                  Are tours suitable for all ages?
+                </button>
+              </h3>
+              <div id="tour3" class="accordion-collapse collapse" data-bs-parent="#tourAccordion">
+                <div class="accordion-body">
+                  <p>We offer tours suitable for various age groups and fitness levels. Each tour description includes information about physical requirements and age recommendations. If you have specific concerns, please contact us for advice on choosing the right tour.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Travel Questions -->
+        <div class="mb-5">
+          <h2 class="h3 mb-4">Travel & Safety</h2>
+          <div class="accordion" id="travelAccordion">
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#travel1">
+                  Do I need travel insurance?
+                </button>
+              </h3>
+              <div id="travel1" class="accordion-collapse collapse show" data-bs-parent="#travelAccordion">
+                <div class="accordion-body">
+                  <p>Yes, we strongly recommend purchasing travel insurance for all our tours. It should cover medical expenses, trip cancellation, lost luggage, and other potential issues. Some tours require proof of insurance before departure.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#travel2">
+                  What safety measures are in place?
+                </button>
+              </h3>
+              <div id="travel2" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                <div class="accordion-body">
+                  <p>Your safety is our top priority. All our tours follow strict safety protocols, and our guides are trained in first aid and emergency procedures. We regularly update our safety measures based on local conditions and global best practices.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#travel3">
+                  What happens in case of emergencies?
+                </button>
+              </h3>
+              <div id="travel3" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                <div class="accordion-body">
+                  <p>We have comprehensive emergency response plans for all our tours. Our guides are trained to handle various situations, and we maintain 24/7 support for emergencies. You'll receive emergency contact information before your tour begins.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <h2 class="h3 mb-4">Still Have Questions?</h2>
+    <p class="lead mb-4">Our travel experts are here to help you with any additional questions.</p>
+    <a href="{% url 'contact' %}" class="btn btn-primary btn-lg px-4">
+      <i class="fas fa-envelope me-2"></i> Contact Us
+    </a>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+  }
+
+  .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0,0,0,.125);
+  }
+
+  .accordion-item {
+    border: 1px solid rgba(0,0,0,.125);
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .accordion-button {
+    font-weight: 500;
+    padding: 1rem 1.25rem;
+  }
+
+  .accordion-body {
+    padding: 1rem 1.25rem;
+  }
+</style>
+{% endblock %} 

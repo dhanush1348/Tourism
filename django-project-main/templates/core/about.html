@@ -1,0 +1,615 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Tours & Travels{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Parallax Effect -->
+<section class="about-hero position-relative overflow-hidden">
+  <div class="parallax-bg" style="background-image: url('{% static 'img/about-hero-bg.jpg' %}');"></div>
+  <div class="container position-relative py-8 py-lg-10 z-index-1">
+    <div class="row align-items-center">
+      <div class="col-lg-6 text-white">
+        <h1 class="display-3 fw-bold mb-4">Our Story of <span class="text-warning">Transforming Travel</span></h1>
+        <p class="lead mb-4">Creating unforgettable journeys since 2024 with passion, expertise, and a commitment to excellence.</p>
+        <div class="d-flex align-items-center">
+          <div class="border-start border-3 border-warning ps-3 me-4">
+            <p class="mb-0 small">Trusted by</p>
+            <h3 class="mb-0 fw-bold">10,000+ Travelers</h3>
+          </div>
+          <div class="border-start border-3 border-warning ps-3">
+            <p class="mb-0 small">Operating in</p>
+            <h3 class="mb-0 fw-bold">50+ Countries</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mt-5 mt-lg-0">
+        <div class="card border-0 shadow-lg overflow-hidden">
+          <img src="{% static 'img/about-team.jpg' %}" alt="Our team on a trip" class="img-fluid">
+          <div class="card-footer bg-white text-center py-3">
+            <p class="mb-0 fw-bold">Our team exploring new destinations to bring you the best experiences</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission & Values -->
+<section class="py-6 py-lg-8 bg-light">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-5">
+        <div class="pe-lg-4">
+          <span class="badge bg-warning text-dark mb-3">Our Purpose</span>
+          <h2 class="display-5 fw-bold mb-4">More Than Just Travel - We Create <span class="text-primary">Life-Changing Experiences</span></h2>
+          <p class="lead">We believe travel has the power to transform perspectives, connect cultures, and create lifelong memories.</p>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+              <div class="card-body p-4">
+                <div class="icon-circle bg-primary bg-opacity-10 text-primary mb-4">
+                  <i class="fas fa-bullseye fa-2x"></i>
+                </div>
+                <h4 class="mb-3">Our Mission</h4>
+                <p class="mb-0">To make extraordinary travel experiences accessible while promoting sustainable tourism practices that benefit local communities.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+              <div class="card-body p-4">
+                <div class="icon-circle bg-success bg-opacity-10 text-success mb-4">
+                  <i class="fas fa-eye fa-2x"></i>
+                </div>
+                <h4 class="mb-3">Our Vision</h4>
+                <p class="mb-0">A world where travel breaks down barriers, fosters understanding, and creates positive change for both travelers and host communities.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+              <div class="card-body p-4">
+                <div class="icon-circle bg-info bg-opacity-10 text-info mb-4">
+                  <i class="fas fa-heart fa-2x"></i>
+                </div>
+                <h4 class="mb-3">Our Values</h4>
+                <ul class="mb-0 ps-3">
+                  <li>Authenticity</li>
+                  <li>Sustainability</li>
+                  <li>Exceptional Service</li>
+                  <li>Cultural Respect</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+              <div class="card-body p-4">
+                <div class="icon-circle bg-warning bg-opacity-10 text-warning mb-4">
+                  <i class="fas fa-handshake fa-2x"></i>
+                </div>
+                <h4 class="mb-3">Our Promise</h4>
+                <p class="mb-0">To deliver meticulously planned journeys that exceed expectations while maintaining the highest ethical standards in tourism.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="py-6 py-lg-8 position-relative">
+  <div class="container">
+    <div class="row justify-content-center mb-6">
+      <div class="col-lg-8 text-center">
+        <span class="badge bg-primary mb-3">Our Journey</span>
+        <h2 class="display-5 fw-bold mb-3">Milestones in Our <span class="text-warning">Travel Story</span></h2>
+        <p class="lead">From humble beginnings to becoming a trusted name in travel experiences worldwide.</p>
+      </div>
+    </div>
+    
+    <div class="timeline">
+      <div class="timeline-container left">
+        <div class="timeline-content shadow-sm">
+          <h4>2024</h4>
+          <p>Founded with a small team of passionate travelers in New York</p>
+          <div class="timeline-image" style="background-image: url('{% static 'img/timeline-1.jpg' %}');"></div>
+        </div>
+      </div>
+      <div class="timeline-container right">
+        <div class="timeline-content shadow-sm">
+          <h4>2025</h4>
+          <p>Launched our first international tours to Europe and Asia</p>
+          <div class="timeline-image" style="background-image: url('{% static 'img/timeline-2.jpg' %}');"></div>
+        </div>
+      </div>
+      <div class="timeline-container left">
+        <div class="timeline-content shadow-sm">
+          <h4>2026</h4>
+          <p>Received "Best New Travel Company" award from Travel Weekly</p>
+          <div class="timeline-image" style="background-image: url('{% static 'img/timeline-3.jpg' %}');"></div>
+        </div>
+      </div>
+      <div class="timeline-container right">
+        <div class="timeline-content shadow-sm">
+          <h4>2027</h4>
+          <p>Expanded to offer luxury and adventure travel packages</p>
+          <div class="timeline-image" style="background-image: url('{% static 'img/timeline-4.jpg' %}');"></div>
+        </div>
+      </div>
+      <div class="timeline-container left">
+        <div class="timeline-content shadow-sm">
+          <h4>Present</h4>
+          <p>Operating in 50+ countries with a team of 150 travel experts</p>
+          <div class="timeline-image" style="background-image: url('{% static 'img/timeline-5.jpg' %}');"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-6 py-lg-8 bg-light">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-8 text-center">
+        <span class="badge bg-info mb-3">Meet The Experts</span>
+        <h2 class="display-5 fw-bold mb-3">The Passionate Team Behind <span class="text-primary">Your Journeys</span></h2>
+        <p class="lead">Our diverse team of travel experts brings local knowledge, cultural insights, and unparalleled enthusiasm to every trip we plan.</p>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <!-- Team Member 1 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-1.jpg' %}" class="img-fluid w-100" alt="Tharun">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Tharun</h5>
+            <p class="text-muted mb-2">Founder & CEO</p>
+            <p class="small mb-0">15+ years in tourism industry. Speaks 4 languages. Passionate about sustainable travel.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Team Member 2 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-2.jpg' %}" class="img-fluid w-100" alt="Adithya">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Adithya</h5>
+            <p class="text-muted mb-2">Head of Operations</p>
+            <p class="small mb-0">Former hotel manager. Expert in creating seamless travel experiences across continents.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Team Member 3 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-3.jpg' %}" class="img-fluid w-100" alt="Madhu">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Madhu</h5>
+            <p class="text-muted mb-2">Customer Experience</p>
+            <p class="small mb-0">Ensures every detail is perfect. Known for going above and beyond for our travelers.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Team Member 4 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-4.jpg' %}" class="img-fluid w-100" alt="Dhanush">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Dhanush</h5>
+            <p class="text-muted mb-2">Asia Travel Specialist</p>
+            <p class="small mb-0">Born in Shanghai. Shares hidden gems and authentic cultural experiences across Asia.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Member 5 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-1.jpg' %}" class="img-fluid w-100" alt="Sanjana">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Sanjana</h5>
+            <p class="text-muted mb-2">Marketing Director</p>
+            <p class="small mb-0">Creative strategist who brings our travel stories to life through compelling campaigns.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Member 6 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-2.jpg' %}" class="img-fluid w-100" alt="Sunitha">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Sunitha</h5>
+            <p class="text-muted mb-2">Europe Specialist</p>
+            <p class="small mb-0">Lived in 5 European countries. Creates immersive cultural experiences for travelers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Member 7 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-3.jpg' %}" class="img-fluid w-100" alt="Sravanth">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Sravanth</h5>
+            <p class="text-muted mb-2">Adventure Guide</p>
+            <p class="small mb-0">Certified mountaineer and scuba diver. Leads our most exciting adventure tours.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Member 8 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card team-card border-0 shadow-sm hover-lift h-100">
+          <div class="card-img-top overflow-hidden">
+            <img src="{% static 'img/team-4.jpg' %}" class="img-fluid w-100" alt="Lokesh">
+            <div class="team-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="mb-1">Lokesh</h5>
+            <p class="text-muted mb-2">Technology Director</p>
+            <p class="small mb-0">Develops innovative platforms to enhance your travel planning experience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-5">
+      <a href="{% url 'core:team' %}" class="btn btn-outline-primary px-4">Meet Full Team <i class="fas fa-arrow-right ms-2"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-6 py-lg-8 bg-dark text-white position-relative">
+  <div class="background-overlay" style="background-image: url('{% static 'img/stats-bg.jpg' %}');"></div>
+  <div class="container position-relative z-index-1">
+    <div class="row g-4 text-center">
+      <div class="col-md-3">
+        <div class="display-4 fw-bold text-warning mb-2" data-count="10000">0</div>
+        <p class="mb-0 text-uppercase small">Happy Travelers</p>
+      </div>
+      <div class="col-md-3">
+        <div class="display-4 fw-bold text-warning mb-2" data-count="50">0</div>
+        <p class="mb-0 text-uppercase small">Countries Covered</p>
+      </div>
+      <div class="col-md-3">
+        <div class="display-4 fw-bold text-warning mb-2" data-count="250">0</div>
+        <p class="mb-0 text-uppercase small">Custom Tours</p>
+      </div>
+      <div class="col-md-3">
+        <div class="display-4 fw-bold text-warning mb-2" data-count="98">0</div>
+        <p class="mb-0 text-uppercase small">Satisfaction Rate</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-6 py-lg-8 bg-primary text-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h2 class="display-5 fw-bold mb-3">Ready to Start Your Adventure?</h2>
+        <p class="lead mb-lg-0">Let our travel experts craft your perfect itinerary tailored to your interests and preferences.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+        <a href="{% url 'contact' %}" class="btn btn-light btn-lg px-4 me-2">
+          <i class="fas fa-envelope me-2"></i> Contact Us
+        </a>
+        <a href="{% url 'bookings:tour_list' %}" class="btn btn-outline-light btn-lg px-4">
+          <i class="fas fa-map-marked-alt me-2"></i> Browse Tours
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Hero Section */
+  .about-hero {
+    padding: 100px 0;
+    background-color: #333;
+    color: white;
+  }
+  
+  .parallax-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 0.7;
+    z-index: 0;
+  }
+  
+  /* Timeline */
+  .timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #4e8bc9;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+    border-radius: 3px;
+  }
+  
+  .timeline-container {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+  }
+  
+  .timeline-container::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -12px;
+    background-color: white;
+    border: 4px solid #4e8bc9;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  .left {
+    left: 0;
+  }
+  
+  .right {
+    left: 50%;
+  }
+  
+  .left::before {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    right: 30px;
+    border: medium solid white;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent white;
+  }
+  
+  .right::before {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    left: 30px;
+    border: medium solid white;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent white transparent transparent;
+  }
+  
+  .right::after {
+    left: -12px;
+  }
+  
+  .timeline-content {
+    padding: 20px 30px;
+    background-color: white;
+    position: relative;
+    border-radius: 6px;
+  }
+  
+  .timeline-image {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+    margin: 15px -30px -20px -30px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  
+  /* Team Cards */
+  .team-card {
+    transition: all 0.3s ease;
+  }
+  
+  .team-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .team-social {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .team-card:hover .team-social {
+    bottom: 20px;
+    opacity: 1;
+  }
+  
+  .team-social a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background: white;
+    color: #4e8bc9;
+    border-radius: 50%;
+    line-height: 36px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .team-social a:hover {
+    background: #4e8bc9;
+    color: white;
+  }
+  
+  /* Stats Section */
+  .background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+  }
+  
+  /* Hover Effects */
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+  }
+  
+  /* Responsive timeline */
+  @media screen and (max-width: 768px) {
+    .timeline::after {
+      left: 31px;
+    }
+    
+    .timeline-container {
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+    
+    .timeline-container::before {
+      left: 60px;
+      border: medium solid white;
+      border-width: 10px 10px 10px 0;
+      border-color: transparent white transparent transparent;
+    }
+    
+    .left::after, .right::after {
+      left: 15px;
+    }
+    
+    .right {
+      left: 0%;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Animate stats counting
+  document.addEventListener('DOMContentLoaded', function() {
+    const counters = document.querySelectorAll('.display-4');
+    const speed = 200;
+    
+    counters.forEach(counter => {
+      const target = +counter.getAttribute('data-count');
+      const count = +counter.innerText;
+      const increment = target / speed;
+      
+      if (count < target) {
+        counter.innerText = Math.ceil(count + increment);
+        setTimeout(updateCount, 1);
+      } else {
+        counter.innerText = target;
+      }
+      
+      function updateCount() {
+        const count = +counter.innerText;
+        const increment = target / speed;
+        
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(updateCount, 1);
+        } else {
+          counter.innerText = target;
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

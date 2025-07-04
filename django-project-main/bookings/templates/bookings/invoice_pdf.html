@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice - {{ booking.booking_reference }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+        .company-info {
+            margin-bottom: 30px;
+        }
+        .invoice-details {
+            margin-bottom: 30px;
+        }
+        .customer-info {
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .total-row {
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #666;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>INVOICE</h1>
+        <p>Invoice #{{ booking.booking_reference }}</p>
+        <p>Date: {{ booking.created_at|date:"F d, Y" }}</p>
+    </div>
+
+    <div class="company-info">
+        <h2>Tours & Travels</h2>
+        <p>123 Travel Street</p>
+        <p>Tourist City, TC 12345</p>
+        <p>Phone: +1 (123) 456-7890</p>
+        <p>Email: info@toursandtravels.com</p>
+        <p>Website: www.toursandtravels.com</p>
+    </div>
+
+    <div class="customer-info">
+        <h3>Bill To:</h3>
+        <p>{{ booking.full_name }}</p>
+        <p>{{ booking.email }}</p>
+        <p>{{ booking.phone }}</p>
+    </div>
+
+    <div class="invoice-details">
+        <h3>Tour Details</h3>
+        <table>
+            <tr>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Participants</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>{{ booking.tour.name }}</td>
+                <td>{{ booking.tour.start_date|date:"M d, Y" }} - {{ booking.tour.end_date|date:"M d, Y" }}</td>
+                <td>{{ booking.tour.duration_days }} days</td>
+                <td>{{ booking.participants }}</td>
+                <td>${{ booking.base_price|floatformat:2 }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="payment-details">
+        <h3>Payment Summary</h3>
+        <table>
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>Tour Price (x{{ booking.participants }})</td>
+                <td>${{ booking.base_price|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td>GST (5%)</td>
+                <td>${{ booking.gst_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td>SGST (5%)</td>
+                <td>${{ booking.sgst_amount|floatformat:2 }}</td>
+            </tr>
+            <tr class="total-row">
+                <td>Total Amount</td>
+                <td>${{ booking.total_amount|floatformat:2 }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="payment-status">
+        <h3>Payment Status</h3>
+        <p>Status: <strong>{{ booking.status|title }}</strong></p>
+        <p>Payment Method: {{ booking.payment_method|title }}</p>
+        <p>Transaction ID: {{ booking.transaction_id }}</p>
+    </div>
+
+    <div class="footer">
+        <p>Thank you for choosing Tours & Travels!</p>
+        <p>This is a computer-generated invoice and does not require a signature.</p>
+        <p>For any queries, please contact our customer support.</p>
+    </div>
+</body>
+</html> 

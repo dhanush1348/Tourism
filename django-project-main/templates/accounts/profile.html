@@ -1,0 +1,510 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Profile - {{ user.get_full_name }}{% endblock %}
+
+{% block content %}
+<!-- Profile Header -->
+<section class="profile-header py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <div class="d-flex align-items-center">
+          <div class="me-4">
+            <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" 
+                 alt="{{ user.get_full_name }}" 
+                 class="rounded-circle shadow" 
+                 width="100" 
+                 height="100">
+          </div>
+          <div>
+            <h1 class="display-6 fw-bold mb-1">{{ user.get_full_name }}</h1>
+            <p class="text-muted mb-2">{{ user.email }}</p>
+            <div class="d-flex">
+              <span class="badge bg-primary me-2">
+                <i class="fas fa-medal me-1"></i> Gold Member
+              </span>
+              <span class="badge bg-success">
+                <i class="fas fa-check-circle me-1"></i> Verified
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-md-end mt-4 mt-md-0">
+        <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary me-2">
+          <i class="fas fa-user-edit me-1"></i> Edit Profile
+        </a>
+        <a href="{% url 'accounts:logout' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-sign-out-alt me-1"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Profile Content -->
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-lg-3 mb-4">
+        <div class="card shadow-sm sticky-top" style="top: 20px;">
+          <div class="list-group list-group-flush">
+            <a href="#profile-info" class="list-group-item list-group-item-action active">
+              <i class="fas fa-user-circle me-2"></i> Profile Information
+            </a>
+            <a href="#wishlist" class="list-group-item list-group-item-action">
+              <i class="fas fa-heart me-2"></i> Wishlist
+            </a>
+            <a href="#bookings" class="list-group-item list-group-item-action">
+              <i class="fas fa-calendar-check me-2"></i> My Bookings
+            </a>
+            <a href="#reviews" class="list-group-item list-group-item-action">
+              <i class="fas fa-star me-2"></i> My Reviews
+            </a>
+            <a href="#settings" class="list-group-item list-group-item-action">
+              <i class="fas fa-cog me-2"></i> Account Settings
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <!-- Profile Information Section -->
+        <div class="card shadow-sm mb-5" id="profile-info">
+          <div class="card-header bg-white border-bottom-0">
+            <h3 class="mb-0">
+              <i class="fas fa-user-circle text-primary me-2"></i> Profile Information
+            </h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <h5 class="text-muted mb-3">Personal Details</h5>
+                  <div class="d-flex mb-3">
+                    <div class="me-3 text-muted">
+                      <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                      <p class="mb-0 small text-muted">Email Address</p>
+                      <p class="mb-0">{{ user.email }}</p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="me-3 text-muted">
+                      <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                      <p class="mb-0 small text-muted">Phone Number</p>
+                      <p class="mb-0">{{ user.phone_number|default:"Not provided" }}</p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="me-3 text-muted">
+                      <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <div>
+                      <p class="mb-0 small text-muted">Date of Birth</p>
+                      <p class="mb-0">{{ user.date_of_birth|default:"Not provided" }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <h5 class="text-muted mb-3">Travel Preferences</h5>
+                  <div class="d-flex mb-3">
+                    <div class="me-3 text-muted">
+                      <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div>
+                      <p class="mb-0 small text-muted">Preferred Currency</p>
+                      <p class="mb-0">{{ user.preferred_currency }}</p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="me-3 text-muted">
+                      <i class="fas fa-language"></i>
+                    </div>
+                    <div>
+                      <p class="mb-0 small text-muted">Preferred Language</p>
+                      <p class="mb-0">{{ user.preferred_language }}</p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="me-3 text-muted">
+                      <i class="fas fa-suitcase-rolling"></i>
+                    </div>
+                    <div>
+                      <p class="mb-0 small text-muted">Travel Style</p>
+                      <p class="mb-0">{{ user.travel_style|default:"Not specified" }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-end">
+              <a href="{% url 'accounts:profile_edit' %}" class="btn btn-outline-primary">
+                <i class="fas fa-edit me-1"></i> Edit Profile
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wishlist Section -->
+        <div class="card shadow-sm mb-5" id="wishlist">
+          <div class="card-header bg-white border-bottom-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="mb-0">
+                <i class="fas fa-heart text-danger me-2"></i> My Wishlist
+              </h3>
+              <span class="badge bg-primary rounded-pill">{{ wishlist_items|length }} items</span>
+            </div>
+          </div>
+          <div class="card-body">
+            {% if wishlist_items %}
+              <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for item in wishlist_items %}
+                  <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                      {% if item.tour.featured_image %}
+                        <img src="{{ item.tour.featured_image.url }}" class="card-img-top" alt="{{ item.tour.title }}" style="height: 180px; object-fit: cover;">
+                      {% else %}
+                        <img src="{% static 'img/default-tour.jpg' %}" class="card-img-top" alt="{{ item.tour.title }}" style="height: 180px; object-fit: cover;">
+                      {% endif %}
+                      <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                          <span class="badge bg-primary">{{ item.tour.category.name }}</span>
+                          <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span class="text-muted small ms-1">(24)</span>
+                          </div>
+                        </div>
+                        <h5 class="card-title">{{ item.tour.title }}</h5>
+                        <p class="card-text text-muted small">
+                          <i class="fas fa-map-marker-alt me-1"></i> {{ item.tour.destination.name }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                          <div>
+                            <span class="text-primary fw-bold">${{ item.tour.price }}</span>
+                            <span class="text-muted small">/person</span>
+                          </div>
+                          <div>
+                            <button class="btn btn-sm btn-outline-danger" 
+                                    hx-post="{% url 'accounts:toggle_wishlist' item.tour.id %}"
+                                    hx-swap="outerHTML"
+                                    hx-target="#wishlist">
+                              <i class="fas fa-heart"></i> Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-center py-5">
+                <div class="mb-4">
+                  <i class="fas fa-heart-broken fa-4x text-muted opacity-25"></i>
+                </div>
+                <h5 class="mb-3">Your wishlist is empty</h5>
+                <p class="text-muted mb-4">Start saving your favorite tours to plan your next adventure</p>
+                <a href="{% url 'tours' %}" class="btn btn-primary">
+                  <i class="fas fa-search me-1"></i> Browse Tours
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Upcoming Bookings Section -->
+        <div class="card shadow-sm mb-5" id="bookings">
+          <div class="card-header bg-white border-bottom-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="mb-0">
+                <i class="fas fa-calendar-check text-success me-2"></i> Upcoming Bookings
+              </h3>
+              <span class="badge bg-success rounded-pill">3 trips</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Tour</th>
+                    <th>Dates</th>
+                    <th>Travelers</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="{% static 'img/tour-italy.jpg' %}" class="rounded me-3" width="60" alt="Italian Adventure">
+                        <div>
+                          <h6 class="mb-0">Italian Adventure</h6>
+                          <small class="text-muted">Rome, Florence, Venice</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div>May 15 - 22, 2023</div>
+                      <small class="text-muted">7 days</small>
+                    </td>
+                    <td>2 adults</td>
+                    <td><span class="badge bg-success">Confirmed</span></td>
+                    <td>
+                      <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="{% static 'img/tour-bali.jpg' %}" class="rounded me-3" width="60" alt="Bali Retreat">
+                        <div>
+                          <h6 class="mb-0">Bali Retreat</h6>
+                          <small class="text-muted">Ubud, Seminyak, Nusa Penida</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div>July 5 - 15, 2023</div>
+                      <small class="text-muted">10 days</small>
+                    </td>
+                    <td>1 adult</td>
+                    <td><span class="badge bg-warning text-dark">Pending Payment</span></td>
+                    <td>
+                      <a href="#" class="btn btn-sm btn-outline-primary">Complete Payment</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="{% static 'img/tour-peru.jpg' %}" class="rounded me-3" width="60" alt="Peru Expedition">
+                        <div>
+                          <h6 class="mb-0">Peru Expedition</h6>
+                          <small class="text-muted">Lima, Cusco, Machu Picchu</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div>September 10 - 20, 2023</div>
+                      <small class="text-muted">10 days</small>
+                    </td>
+                    <td>4 adults</td>
+                    <td><span class="badge bg-info">Confirmed</span></td>
+                    <td>
+                      <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-end mt-3">
+              <a href="#" class="btn btn-outline-primary">
+                <i class="fas fa-history me-1"></i> View Booking History
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="card shadow-sm mb-5" id="reviews">
+          <div class="card-header bg-white border-bottom-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="mb-0">
+                <i class="fas fa-star text-warning me-2"></i> My Reviews
+              </h3>
+              <span class="badge bg-warning text-dark rounded-pill">5 reviews</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                      <h5 class="mb-0">French Riviera Escape</h5>
+                      <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                      </div>
+                    </div>
+                    <p class="text-muted small">Posted on March 15, 2023</p>
+                    <p class="mb-0">"Absolutely stunning locations and our guide was incredibly knowledgeable. The hotels selected were perfect and the itinerary had just the right balance of activities and free time."</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                      <h5 class="mb-0">Japanese Cultural Tour</h5>
+                      <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                      </div>
+                    </div>
+                    <p class="text-muted small">Posted on January 5, 2023</p>
+                    <p class="mb-0">"Wonderful experience overall, though I wish we had more time in Kyoto. The tea ceremony was a highlight, and our guide's insights into Japanese culture were invaluable."</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <a href="#" class="btn btn-outline-primary">
+                <i class="fas fa-pen me-1"></i> Write a New Review
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Settings Section -->
+        <div class="card shadow-sm" id="settings">
+          <div class="card-header bg-white border-bottom-0">
+            <h3 class="mb-0">
+              <i class="fas fa-cog text-secondary me-2"></i> Account Settings
+            </h3>
+          </div>
+          <div class="card-body">
+            <div class="list-group list-group-flush">
+              <a href="{% url 'accounts:profile_edit' %}" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">Personal Information</h6>
+                    <p class="small text-muted mb-0">Update your name, email, phone number, and other details</p>
+                  </div>
+                  <i class="fas fa-chevron-right text-muted"></i>
+                </div>
+              </a>
+              <a href="{% url 'accounts:change_password' %}" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">Password & Security</h6>
+                    <p class="small text-muted mb-0">Change your password and manage security settings</p>
+                  </div>
+                  <i class="fas fa-chevron-right text-muted"></i>
+                </div>
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">Notification Preferences</h6>
+                    <p class="small text-muted mb-0">Choose how we contact you and what about</p>
+                  </div>
+                  <i class="fas fa-chevron-right text-muted"></i>
+                </div>
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">Travel Preferences</h6>
+                    <p class="small text-muted mb-0">Update your travel style, interests, and preferences</p>
+                  </div>
+                  <i class="fas fa-chevron-right text-muted"></i>
+                </div>
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">Payment Methods</h6>
+                    <p class="small text-muted mb-0">Manage your saved payment options</p>
+                  </div>
+                  <i class="fas fa-chevron-right text-muted"></i>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Profile Header */
+  .profile-header {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+  
+  /* Card Styling */
+  .card {
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  /* Hover Effects */
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  /* List Group Items */
+  .list-group-item {
+    padding: 1.25rem 1.5rem;
+    border-color: rgba(0,0,0,0.05);
+  }
+  
+  /* Table Styling */
+  .table {
+    margin-bottom: 0;
+  }
+  
+  .table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 767.98px) {
+    .profile-header .text-md-end {
+      text-align: left !important;
+      margin-top: 1rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+{% endblock %}

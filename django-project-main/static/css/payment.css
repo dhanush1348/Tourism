@@ -1,0 +1,53 @@
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#total_amount {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+#credit-card-details {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #495057;
+}
+
+@media (max-width: 768px) {
+    .card {
+        margin: 0 -1rem;
+        border-radius: 0;
+    }
+} 

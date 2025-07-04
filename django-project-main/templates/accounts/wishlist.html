@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Wishlist - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Wishlist Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="mb-0">My Wishlist</h1>
+            <p class="text-muted mb-0">Saved tours you're interested in</p>
+        </div>
+        <div>
+            <span class="badge bg-primary rounded-pill px-3 py-2">
+                <i class="fas fa-heart me-1"></i> {{ wishlist.count }} items
+            </span>
+        </div>
+    </div>
+
+    {% if wishlist %}
+    <!-- Sorting and Filter Options -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-2 mb-md-0">
+            <div class="input-group">
+                <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search in wishlist..." id="wishlistSearch">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-md-end gap-2">
+                <select class="form-select" style="max-width: 200px;">
+                    <option selected>Sort by</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="duration">Duration</option>
+                    <option value="date-added">Date Added</option>
+                </select>
+                <button class="btn btn-outline-secondary">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Items -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for item in wishlist %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                <!-- Tour Image with Badges -->
+                <div class="position-relative">
+                    {% if item.tour.featured_image %}
+                    <img src="{{ item.tour.featured_image.url }}" class="card-img-top" alt="{{ item.tour.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <img src="{% static 'images/default-tour.jpg' %}" class="card-img-top" alt="{{ item.tour.name }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    
+                    <!-- Tour Badges -->
+                    <div class="position-absolute top-0 start-0 m-2">
+                        {% if item.tour.is_featured %}
+                        <span class="badge bg-danger me-1">Featured</span>
+                        {% endif %}
+                        {% if item.tour.discount %}
+                        <span class="badge bg-success">Save {{ item.tour.discount }}%</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Wishlist Button -->
+                    <button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 wishlist-btn"
+                            hx-post="{% url 'accounts:toggle_wishlist' item.tour.id %}"
+                            hx-swap="none"
+                            data-tour-id="{{ item.tour.id }}"
+                            title="Remove from wishlist">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+                
+                <!-- Card Body -->
+                <div class="card-body">
+                    <!-- Destination and Rating -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">
+                            <i class="fas fa-map-marker-alt"></i> {{ item.tour.destination.name }}
+                        </span>
+                        <div class="rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <span>{{ item.tour.get_rating|default:"New" }}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Tour Title -->
+                    <h5 class="card-title">{{ item.tour.name }}</h5>
+                    
+                    <!-- Short Description -->
+                    <p class="card-text text-muted small">{{ item.tour.short_description|truncatewords:20 }}</p>
+                    
+                    <!-- Duration and Group Size -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted small">
+                            <i class="fas fa-clock"></i> {{ item.tour.duration_days }} days
+                        </span>
+                        <span class="text-muted small">
+                            <i class="fas fa-users"></i> Max {{ item.tour.group_size_max }} people
+                        </span>
+                    </div>
+                    
+                    <!-- Price Section -->
+                    <div class="mb-3">
+                        <span class="h5 text-primary">
+                            {% if user.preferred_currency == 'INR' %}
+                                ₹{{ item.tour.get_discounted_price }}
+                            {% elif user.preferred_currency == 'EUR' %}
+                                €{{ item.tour.get_discounted_price }}
+                            {% elif user.preferred_currency == 'GBP' %}
+                                £{{ item.tour.get_discounted_price }}
+                            {% else %}
+                                ${{ item.tour.get_discounted_price }}
+                            {% endif %}
+                        </span>
+                        {% if item.tour.discount %}
+                        <span class="text-muted text-decoration-line-through ms-2">
+                            {% if user.preferred_currency == 'INR' %}
+                                ₹{{ item.tour.price }}
+                            {% elif user.preferred_currency == 'EUR' %}
+                                €{{ item.tour.price }}
+                            {% elif user.preferred_currency == 'GBP' %}
+                                £{{ item.tour.price }}
+                            {% else %}
+                                ${{ item.tour.price }}
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                        <span class="d-block text-muted small">per person</span>
+                    </div>
+                    
+                    <!-- Date Added -->
+                    <p class="text-muted small mb-0">
+                        <i class="far fa-calendar-plus"></i> Added {{ item.added_at|date:"M d, Y" }}
+                    </p>
+                </div>
+                
+                <!-- Card Footer -->
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
+                    <a href="{% url 'bookings:tour_detail' item.tour.slug %}" class="btn btn-outline-primary flex-grow-1 me-2">
+                        <i class="fas fa-eye me-1"></i> View Details
+                    </a>
+                    <a href="{% url 'bookings:create_booking' item.tour.slug %}" class="btn btn-primary">
+                        <i class="fas fa-calendar-check me-1"></i> Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Wishlist Actions -->
+    <div class="d-flex justify-content-between align-items-center mt-5">
+        <div>
+            <button class="btn btn-outline-danger me-2">
+                <i class="fas fa-trash-alt me-1"></i> Clear Wishlist
+            </button>
+            <button class="btn btn-outline-secondary">
+                <i class="fas fa-share-alt me-1"></i> Share Wishlist
+            </button>
+        </div>
+        <div>
+            <a href="{% url 'bookings:tour_list' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Browse More Tours
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty Wishlist State -->
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="far fa-heart text-muted" style="font-size: 5rem;"></i>
+        </div>
+        <h3 class="mb-3">Your wishlist is empty</h3>
+        <p class="text-muted mb-4">Start exploring our amazing tours and save your favorites here</p>
+        <a href="{% url 'bookings:tour_list' %}" class="btn btn-primary btn-lg px-4">
+            <i class="fas fa-umbrella-beach me-2"></i> Browse Tours
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Recently Viewed Tours -->
+{% if recently_viewed %}
+<div class="container-fluid bg-light py-5">
+    <div class="container">
+        <h2 class="mb-4">Recently Viewed Tours</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for tour in recently_viewed %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ tour.featured_image.url|default:'{% static 'images/default-tour.jpg' %}' }}" class="card-img-top" alt="{{ tour.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tour.name }}</h5>
+                        <p class="card-text text-muted small">
+                            <i class="fas fa-map-marker-alt"></i> {{ tour.destination.name }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-primary fw-bold">
+                                {% if user.preferred_currency == 'INR' %}
+                                    ₹{{ tour.price }}
+                                {% elif user.preferred_currency == 'EUR' %}
+                                    €{{ tour.price }}
+                                {% elif user.preferred_currency == 'GBP' %}
+                                    £{{ tour.price }}
+                                {% else %}
+                                    ${{ tour.price }}
+                                {% endif %}
+                            </span>
+                            <a href="{% url 'bookings:tour_detail' tour.slug %}" class="btn btn-sm btn-outline-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% block extra_js %}
+<script>
+    // Wishlist item removal
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchInput = document.getElementById('wishlistSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('.card').forEach(card => {
+                    const title = card.querySelector('.card-title').textContent.toLowerCase();
+                    const destination = card.querySelector('[class*="map-marker-alt"]').parentNode.textContent.toLowerCase();
+                    if (title.includes(searchTerm) || destination.includes(searchTerm)) {
+                        card.parentElement.style.display = 'block';
+                    } else {
+                        card.parentElement.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Clear wishlist confirmation
+        const clearBtn = document.querySelector('.btn-outline-danger');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear your entire wishlist?')) {
+                    // HTMX request to clear wishlist
+                    htmx.ajax('POST', '{% url "accounts:clear_wishlist" %}', {
+                        swap: 'none',
+                        target: document.body
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            });
+        }
+
+        // Wishlist button animation
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            if (evt.detail.successful && evt.target.classList.contains('wishlist-btn')) {
+                const response = JSON.parse(evt.detail.xhr.response);
+                const toast = new bootstrap.Toast(document.getElementById('wishlistToast'));
+                
+                if (response.status === 'removed') {
+                    document.getElementById('toastMessage').textContent = 'Tour removed from wishlist';
+                    evt.target.closest('.col').style.opacity = '0.5';
+                    setTimeout(() => {
+                        evt.target.closest('.col').remove();
+                        // Update wishlist count
+                        const countBadge = document.querySelector('.badge.bg-primary');
+                        if (countBadge) {
+                            const currentCount = parseInt(countBadge.textContent.match(/\d+/)[0]);
+                            countBadge.innerHTML = `<i class="fas fa-heart me-1"></i> ${currentCount - 1} items`;
+                        }
+                    }, 300);
+                }
+                toast.show();
+            }
+        });
+    });
+</script>
+
+<!-- Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="wishlistToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-primary text-white">
+            <strong class="me-auto">Wishlist</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage">
+            Tour removed from wishlist
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% endblock %}

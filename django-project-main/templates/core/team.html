@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Our Team{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4">Meet Our Team</h1>
+        <p class="lead">The passionate individuals behind your unforgettable travel experiences</p>
+    </div>
+
+    <!-- Team Members -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        {% for member in team_members %}
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm">
+                <img src="{% static member.image %}" class="card-img-top" alt="{{ member.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ member.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ member.position }}</h6>
+                    <p class="card-text">{{ member.bio }}</p>
+                    <span class="badge bg-primary">{{ member.specialization }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Special Posts -->
+    <div class="text-center mb-4">
+        <h2>Team Insights</h2>
+        <p class="lead">Expert perspectives from our team members</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for post in special_posts %}
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm">
+                <img src="{% static post.image %}" class="card-img-top" alt="{{ post.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text text-muted">
+                        By {{ post.author }} | {{ post.date }}
+                    </p>
+                    <p class="card-text">{{ post.content }}</p>
+                    <a href="#" class="btn btn-outline-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

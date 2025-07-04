@@ -1,0 +1,871 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Discover World-Class Travel Experiences | Tours & Travels{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Video Background & Search -->
+<section class="hero-section position-relative vh-100 d-flex align-items-center overflow-hidden">
+    <div class="hero-media-wrapper">
+        <!-- Video Background with Fallback Image -->
+        <video class="hero-video position-absolute w-100 h-100 object-fit-cover" autoplay muted loop playsinline poster="{% static 'images/hero-fallback.jpg' %}">
+            <source src="{% static 'video/hero-bg.mp4' %}" type="video/mp4">
+        </video>
+        <div class="hero-gradient-overlay position-absolute w-100 h-100"></div>
+    </div>
+    
+    <div class="container position-relative z-index-2">
+        <div class="row justify-content-center text-center text-lg-start">
+            <div class="col-lg-8 col-xl-7">
+                <div class="hero-content text-white">
+                    <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown" data-aos="fade-down" data-aos-delay="100">
+                        <span class="highlight-text">Explore</span> The World's Most Beautiful Places
+                    </h1>
+                    <p class="lead mb-5 animate__animated animate__fadeIn" data-aos="fade-up" data-aos-delay="200">
+                        Curated travel experiences designed by local experts for unforgettable adventures
+                    </p>
+                    
+                    <!-- Search Form with Advanced Options -->
+                    <div class="search-card bg-white rounded-4 shadow-lg overflow-hidden animate__animated animate__fadeIn" data-aos="fade-up" data-aos-delay="300">
+                        <ul class="nav nav-tabs nav-fill border-0" id="searchTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="tours-tab" data-bs-toggle="tab" data-bs-target="#tours-tab-pane" type="button">Tours</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="destinations-tab" data-bs-toggle="tab" data-bs-target="#destinations-tab-pane" type="button">Destinations</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="activities-tab" data-bs-toggle="tab" data-bs-target="#activities-tab-pane" type="button">Activities</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content p-4">
+                            <div class="tab-pane fade show active" id="tours-tab-pane" role="tabpanel" aria-labelledby="tours-tab">
+                                <form class="search-form">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-map-marker-alt"></i></span>
+                                                <input type="text" class="form-control border-start-0" placeholder="Where to?" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select">
+                                                <option value="">Tour Type</option>
+                                                <option value="adventure">Adventure</option>
+                                                <option value="cultural">Cultural</option>
+                                                <option value="beach">Beach</option>
+                                                <option value="wildlife">Wildlife</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary w-100">
+                                                <i class="fas fa-search me-2"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="destinations-tab-pane" role="tabpanel" aria-labelledby="destinations-tab">
+                                <!-- Destination-specific search form -->
+                            </div>
+                            <div class="tab-pane fade" id="activities-tab-pane" role="tabpanel" aria-labelledby="activities-tab">
+                                <!-- Activity-specific search form -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Trust Indicators -->
+                    <div class="trust-indicators mt-4 animate__animated animate__fadeIn" data-aos="fade-up" data-aos-delay="400">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span class="small">10,000+ Happy Travelers</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-shield-alt text-primary me-2"></i>
+                                <span class="small">Secure Booking</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-headset text-info me-2"></i>
+                                <span class="small">24/7 Support</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-down-indicator position-absolute bottom-0 start-50 translate-middle-x mb-4 z-index-2 animate__animated animate__fadeIn animate__infinite animate__slower" data-aos="fade-up" data-aos-delay="500">
+        <a href="#featured-destinations" class="text-white text-decoration-none">
+            <div class="d-flex flex-column align-items-center">
+                <span class="small mb-2">Explore More</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- Featured Destinations Carousel -->
+<section id="featured-destinations" class="featured-destinations py-6 bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-6" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Featured Destinations</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Discover our handpicked selection of the world's most breathtaking locations
+            </p>
+        </div>
+        
+        <div class="position-relative">
+            <div class="destination-carousel swiper" data-aos="fade-up" data-aos-delay="100">
+                <div class="swiper-wrapper">
+                    {% for destination in featured_destinations %}
+                    <div class="swiper-slide">
+                        <div class="destination-card">
+                            <div class="destination-media">
+                                <img src="{{ destination.image.url }}" class="img-fluid" alt="{{ destination.name }}">
+                                <div class="destination-badge">
+                                    <span class="badge bg-primary">Featured</span>
+                                </div>
+                            </div>
+                            <div class="destination-content">
+                                <h3 class="h5 mb-2">{{ destination.name }}</h3>
+                                <p class="small text-muted mb-3">
+                                    <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                    {{ destination.location }}
+                                </p>
+                                <p class="mb-3">{{ destination.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="price">
+                                        From <span class="text-primary fw-bold">${{ destination.starting_price|default:"299" }}</span>
+                                    </div>
+                                    <a href="{% url 'core:destination_detail' destination.slug %}" class="btn btn-sm btn-outline-primary">
+                                        Explore <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Navigation Arrows -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+        
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="{% url 'core:destination_list' %}" class="btn btn-outline-primary px-4">
+                View All Destinations
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Tours Grid -->
+<section class="popular-tours py-6">
+    <div class="container">
+        <div class="section-header text-center mb-6" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Popular Tours</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Our most booked experiences loved by travelers worldwide
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            {% for tour in featured_tours %}
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter|multiply:50 }}">
+                <div class="tour-card h-100">
+                    <div class="tour-media position-relative">
+                        <img src="{{ tour.featured_image.url }}" class="img-fluid" alt="{{ tour.title }}">
+                        
+                        <!-- Tour Badges -->
+                        <div class="tour-badges">
+                            {% if tour.is_bestseller %}
+                            <span class="badge bg-danger">Bestseller</span>
+                            {% endif %}
+                            {% if tour.is_new %}
+                            <span class="badge bg-success">New</span>
+                            {% endif %}
+                            {% if tour.discount_percentage %}
+                            <span class="badge bg-warning text-dark">{{ tour.discount_percentage }}% Off</span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Wishlist Button -->
+                        {% if user.is_authenticated %}
+                        <button class="wishlist-btn {% if tour.is_in_wishlist %}active{% endif %}"
+                                hx-post="{% url 'accounts:toggle_wishlist' tour.id %}"
+                                hx-swap="none"
+                                data-tour-id="{{ tour.id }}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="tour-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="h5 mb-0">{{ tour.title }}</h3>
+                            <div class="rating small text-warning">
+                                <i class="fas fa-star"></i>
+                                <span>{{ tour.average_rating|default:"New" }}</span>
+                            </div>
+                        </div>
+                        
+                        <p class="small text-muted mb-3">
+                            <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                            {{ tour.location }}
+                        </p>
+                        
+                        <p class="mb-3">{{ tour.description|truncatewords:20 }}</p>
+                        
+                        <div class="tour-meta d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-clock text-primary me-1"></i> {{ tour.duration_days }} days
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-users text-primary me-1"></i> {{ tour.group_size_min }}-{{ tour.group_size_max }} people
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="tour-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">
+                                <span class="text-primary fw-bold">${{ tour.price }}</span>
+                                {% if tour.discount_price %}
+                                <span class="text-decoration-line-through text-muted small ms-2">${{ tour.discount_price }}</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'bookings:tour_detail' tour.slug %}" class="btn btn-sm btn-primary">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="{% url 'bookings:tour_list' %}" class="btn btn-outline-primary px-4">
+                Browse All Tours
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Experience Categories -->
+<section class="experience-categories py-6 bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-6" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Find Your Perfect Experience</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Explore tours tailored to your travel style and interests
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            {% for category in experience_categories %}
+            <div class="col-6 col-md-4 col-lg-2" data-aos="fade-up" data-aos-delay="{{ forloop.counter|multiply:50 }}">
+                <a href="{% url 'bookings:tour_list' %}?category={{ category.slug }}" class="category-card text-center text-decoration-none">
+                    <div class="category-icon mb-3">
+                        <i class="{{ category.icon }} fa-2x"></i>
+                    </div>
+                    <h3 class="h6 mb-0">{{ category.name }}</h3>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials py-6 bg-dark text-white">
+    <div class="container">
+        <div class="section-header text-center mb-6" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Traveler Stories</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Don't just take our word for it - hear from our happy travelers
+            </p>
+        </div>
+        
+        <div class="testimonial-carousel swiper" data-aos="fade-up" data-aos-delay="100">
+            <div class="swiper-wrapper">
+                {% for testimonial in testimonials %}
+                <div class="swiper-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating mb-3">
+                            {% for i in "12345"|make_list %}
+                            <i class="fas fa-star {% if forloop.counter <= testimonial.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                            {% endfor %}
+                        </div>
+                        <p class="testimonial-content mb-4">"{{ testimonial.content }}"</p>
+                        <div class="testimonial-author d-flex align-items-center">
+                            <img src="{{ testimonial.user.profile.image.url|default:'/static/images/default-avatar.jpg' }}" class="rounded-circle me-3" width="50" height="50" alt="{{ testimonial.user.get_full_name }}">
+                            <div>
+                                <h4 class="h6 mb-0">{{ testimonial.user.get_full_name }}</h4>
+                                <p class="small text-muted mb-0">{{ testimonial.tour.title }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-choose-us py-6">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                <div class="section-header mb-5">
+                    <h2 class="display-5 fw-bold mb-3">Why Travel With Us</h2>
+                    <p class="lead text-muted">
+                        We're committed to providing exceptional travel experiences that create lifelong memories
+                    </p>
+                </div>
+                
+                <div class="feature-list">
+                    <div class="feature-item d-flex mb-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center me-4">
+                            <i class="fas fa-award fa-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="h5 mb-2">Award-Winning Service</h3>
+                            <p class="mb-0">Recognized as one of the top travel agencies for customer satisfaction.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item d-flex mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center me-4">
+                            <i class="fas fa-map-marked-alt fa-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="h5 mb-2">Local Expertise</h3>
+                            <p class="mb-0">Our guides are locals who know the hidden gems and best-kept secrets.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item d-flex" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center me-4">
+                            <i class="fas fa-lock fa-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="h5 mb-2">Flexible Booking</h3>
+                            <p class="mb-0">Easy cancellations and rescheduling with our flexible booking policy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="image-stack position-relative">
+                    <img src="{% static 'images/why-choose-1.jpg' %}" class="img-fluid rounded-4 shadow-lg position-relative z-index-2" alt="Happy travelers">
+                    <img src="{% static 'images/why-choose-2.jpg' %}" class="img-fluid rounded-4 shadow-lg position-absolute top-0 start-0 mt-4 ms-n4 z-index-1" alt="Tour guide">
+                    <img src="{% static 'images/why-choose-3.jpg' %}" class="img-fluid rounded-4 shadow-lg position-absolute bottom-0 end-0 mb-4 me-n4 z-index-3" alt="Beautiful destination">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section py-6 bg-primary text-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="section-header mb-5" data-aos="fade-up">
+                    <h2 class="display-5 fw-bold mb-3">Ready for Your Next Adventure?</h2>
+                    <p class="lead mb-0">
+                        Subscribe to get exclusive deals, travel inspiration, and tips straight to your inbox
+                    </p>
+                </div>
+                
+                <form class="newsletter-form mx-auto" style="max-width: 600px;" data-aos="fade-up" data-aos-delay="100">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email address" required>
+                        <button class="btn btn-dark" type="submit">
+                            Subscribe <i class="fas fa-paper-plane ms-2"></i>
+                        </button>
+                    </div>
+                    <div class="form-check d-inline-block">
+                        <input class="form-check-input" type="checkbox" id="newsletterConsent" checked>
+                        <label class="form-check-label small" for="newsletterConsent">
+                            I agree to receive travel deals and updates
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Instagram Feed -->
+<section class="instagram-feed py-6">
+    <div class="container">
+        <div class="section-header text-center mb-5" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Follow Our Adventures</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Tag #TravelWithUs to be featured on our page
+            </p>
+        </div>
+        
+        <div class="instagram-grid" data-aos="fade-up" data-aos-delay="100">
+            <div class="row g-0">
+                {% for i in "123456"|make_list %}
+                <div class="col-4 col-md-2">
+                    <a href="#" class="instagram-post position-relative d-block overflow-hidden">
+                        <img src="{% static 'images/instagram-'|add:i|add:'.jpg' %}" class="img-fluid" alt="Instagram post">
+                        <div class="instagram-overlay position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
+                            <i class="fab fa-instagram fa-2x text-white"></i>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+<style>
+    /* Custom Variables */
+    :root {
+        --primary-color: #3a86ff;
+        --secondary-color: #8338ec;
+        --dark-color: #212529;
+        --light-color: #f8f9fa;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        background-color: var(--dark-color);
+    }
+    
+    .hero-media-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .hero-gradient-overlay {
+        background: linear-gradient(135deg, rgba(58, 134, 255, 0.3) 0%, rgba(131, 56, 236, 0.3) 100%);
+        z-index: 1;
+    }
+    
+    .z-index-2 {
+        z-index: 2;
+    }
+    
+    .highlight-text {
+        color: var(--primary-color);
+    }
+    
+    .search-card {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+    }
+    
+    .search-card .nav-tabs .nav-link {
+        padding: 1rem;
+        color: var(--dark-color);
+        font-weight: 500;
+        border: none;
+    }
+    
+    .search-card .nav-tabs .nav-link.active {
+        color: var(--primary-color);
+        background: transparent;
+        border-bottom: 3px solid var(--primary-color);
+    }
+    
+    /* Destination Cards */
+    .destination-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+    
+    .destination-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    .destination-media {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .destination-media img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .destination-card:hover .destination-media img {
+        transform: scale(1.05);
+    }
+    
+    .destination-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+    
+    .destination-content {
+        padding: 1.5rem;
+    }
+    
+    /* Tour Cards */
+    .tour-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+    
+    .tour-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    .tour-media {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tour-media img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .tour-card:hover .tour-media img {
+        transform: scale(1.05);
+    }
+    
+    .tour-badges {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .wishlist-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-color);
+        transition: all 0.3s ease;
+    }
+    
+    .wishlist-btn:hover, .wishlist-btn.active {
+        color: #dc3545;
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .wishlist-btn i {
+        transition: all 0.3s ease;
+    }
+    
+    .tour-body {
+        padding: 1.5rem;
+    }
+    
+    .tour-footer {
+        padding: 0 1.5rem 1.5rem;
+    }
+    
+    /* Experience Categories */
+    .category-card {
+        padding: 1.5rem 1rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .category-card:hover .category-icon {
+        transform: scale(1.1);
+    }
+    
+    .category-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(58, 134, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        transition: all 0.3s ease;
+    }
+    
+    .category-card:hover .category-icon {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Testimonials */
+    .testimonials {
+        background: linear-gradient(135deg, var(--dark-color) 0%, #343a40 100%);
+    }
+    
+    .testimonial-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 2rem;
+        height: 100%;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .testimonial-content {
+        font-style: italic;
+        position: relative;
+    }
+    
+    .testimonial-content::before,
+    .testimonial-content::after {
+        content: '"';
+        font-size: 2rem;
+        color: rgba(255, 255, 255, 0.2);
+        position: absolute;
+    }
+    
+    .testimonial-content::before {
+        top: -15px;
+        left: -10px;
+    }
+    
+    .testimonial-content::after {
+        bottom: -25px;
+        right: -10px;
+    }
+    
+    /* Why Choose Us */
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .image-stack {
+        max-width: 500px;
+        margin-left: auto;
+        min-height: 400px;
+    }
+    
+    .image-stack img {
+        border: 5px solid white;
+    }
+    
+    /* Newsletter */
+    .newsletter-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    }
+    
+    .newsletter-form .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.75rem 1rem;
+    }
+    
+    .newsletter-form .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .newsletter-form .btn {
+        padding: 0.75rem 1.5rem;
+    }
+    
+    /* Instagram Feed */
+    .instagram-post {
+        aspect-ratio: 1/1;
+    }
+    
+    .instagram-post img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .instagram-overlay {
+        background: rgba(58, 134, 255, 0.5);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .instagram-post:hover .instagram-overlay {
+        opacity: 1;
+    }
+    
+    .instagram-post:hover img {
+        transform: scale(1.1);
+    }
+    
+    /* Section Spacing */
+    .py-6 {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+    
+    .mb-6 {
+        margin-bottom: 5rem;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .hero-section {
+            min-height: auto;
+            padding-top: 7rem;
+            padding-bottom: 4rem;
+        }
+        
+        .hero-content h1 {
+            font-size: 2.5rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        
+        .image-stack {
+            min-height: 300px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .search-card .nav-tabs .nav-link {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .destination-media img,
+        .tour-media img {
+            height: 180px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.0"></script>
+
+<script>
+    // Initialize AOS animation
+    document.addEventListener('DOMContentLoaded', function() {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+        
+        // Initialize destination carousel
+        const destinationCarousel = new Swiper('.destination-carousel.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                992: {
+                    slidesPerView: 3,
+                }
+            }
+        });
+        
+        // Initialize testimonial carousel
+        const testimonialCarousel = new Swiper('.testimonial-carousel.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                }
+            }
+        });
+        
+        // Wishlist button functionality
+        document.querySelectorAll('.wishlist-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!this.classList.contains('active')) {
+                    this.innerHTML = '<i class="fas fa-heart"></i>';
+                    this.classList.add('active');
+                } else {
+                    this.innerHTML = '<i class="fas fa-heart"></i>';
+                    this.classList.remove('active');
+                }
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

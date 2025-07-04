@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Booking Confirmation - {{ booking.tour.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Success Message -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h2 class="card-title">Booking Confirmed!</h2>
+                    <p class="text-muted">Your booking has been successfully confirmed. We've sent the details to your email.</p>
+                </div>
+            </div>
+
+            <!-- Booking Details -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Booking Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Tour Information</h5>
+                            <p><strong>Tour:</strong> {{ booking.tour.name }}</p>
+                            <p><strong>Date:</strong> {{ booking.tour_date|date:"F d, Y" }}</p>
+                            <p><strong>Duration:</strong> {{ booking.tour.duration }} days</p>
+                            <p><strong>Price:</strong> ${{ booking.total_price }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Contact Information</h5>
+                            <p><strong>Name:</strong> {{ booking.customer_name }}</p>
+                            <p><strong>Email:</strong> {{ booking.customer_email }}</p>
+                            <p><strong>Phone:</strong> {{ booking.customer_phone }}</p>
+                            <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Next Steps</h4>
+                </div>
+                <div class="card-body">
+                    <ol class="list-group list-group-numbered">
+                        <li class="list-group-item">Check your email for the booking confirmation</li>
+                        <li class="list-group-item">Review the tour details and requirements</li>
+                        <li class="list-group-item">Contact us if you have any questions</li>
+                        <li class="list-group-item">Prepare for your upcoming adventure!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2">
+                <a href="{% url 'bookings:my_bookings' %}" class="btn btn-primary">
+                    <i class="fas fa-list"></i> View All My Bookings
+                </a>
+                <a href="{% url 'tours:home' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-home"></i> Return to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

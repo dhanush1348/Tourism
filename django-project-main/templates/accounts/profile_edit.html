@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Profile - {{ user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 2rem 0; max-width: 1200px; margin: 0 auto; min-height: 100vh;">
+    <div style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 4rem);">
+        <div style="width: 100%; max-width: 800px;">
+            <!-- Dark Mode Toggle -->
+            <div style="text-align: right; margin-bottom: 1rem;">
+                <button id="darkModeToggle" style="background: #f1f5f9; border: 1px solid #e2e8f0; padding: 0.375rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease;">
+                    <span id="darkModeIcon" style="font-size: 1rem;">🌙</span>
+                    <span id="darkModeText">Dark Mode</span>
+                </button>
+            </div>
+            
+            <!-- Profile Edit Card -->
+            <div id="profileCard" style="background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; transition: all 0.3s ease; border: 1px solid #e2e8f0;">
+                <!-- Card Header -->
+                <div id="cardHeader" style="background: linear-gradient(135deg, #3b82f6, #6366f1); padding: 1.75rem; text-align: center;">
+                    <h2 style="color: white; margin: 0; font-weight: 600; font-size: 1.5rem;">Edit Profile</h2>
+                    <p style="color: rgba(255,255,255,0.8); margin: 0.5rem 0 0; font-size: 0.9rem;">Update your personal information</p>
+                </div>
+                
+                <!-- Card Body -->
+                <div id="cardBody" style="padding: 2rem; background: #ffffff; position: relative;">
+                    <!-- Avatar Preview -->
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="position: relative; display: inline-block;">
+                            <img id="avatarPreview" src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
+                                 style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #e2e8f0;">
+                            <label for="id_avatar" style="position: absolute; bottom: 0; right: 0; background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                </svg>
+                                <input type="file" name="avatar" id="id_avatar" accept="image/*" style="display: none;">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Edit Form -->
+                    <form method="post" enctype="multipart/form-data" id="profileForm">
+                        {% csrf_token %}
+                        
+                        <!-- Name Fields -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                            <div>
+                                <label for="id_first_name" style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-size: 0.875rem; font-weight: 500;">First Name</label>
+                                <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value|default:'' }}" 
+                                       style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #d1d5db; transition: all 0.2s ease;"
+                                       onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.2)';"
+                                       onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none';">
+                            </div>
+                            <div>
+                                <label for="id_last_name" style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-size: 0.875rem; font-weight: 500;">Last Name</label>
+                                <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value|default:'' }}" 
+                                       style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #d1d5db; transition: all 0.2s ease;"
+                                       onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.2)';"
+                                       onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none';">
+                            </div>
+                        </div>
+                        
+                        <!-- Email Field -->
+                        <div style="margin-bottom: 1.25rem;">
+                            <label for="id_email" style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-size: 0.875rem; font-weight: 500;">Email</label>
+                            <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" 
+                                   style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #d1d5db; transition: all 0.2s ease;"
+                                   onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.2)';"
+                                   onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none';">
+                        </div>
+                        
+                        <!-- Bio Field -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="id_bio" style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-size: 0.875rem; font-weight: 500;">Bio</label>
+                            <textarea name="bio" id="id_bio" rows="4" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #d1d5db; transition: all 0.2s ease;"
+                                      onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.2)';"
+                                      onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none';">{{ form.bio.value|default:'' }}</textarea>
+                        </div>
+                        
+                        <!-- Location Field -->
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="id_location" style="display: block; margin-bottom: 0.5rem; color: #4b5563; font-size: 0.875rem; font-weight: 500;">Location</label>
+                            <input type="text" name="location" id="id_location" value="{{ form.location.value|default:'' }}" 
+                                   style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #d1d5db; transition: all 0.2s ease;"
+                                   onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.2)';"
+                                   onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none';">
+                        </div>
+                        
+                        <!-- Form Actions -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
+                            <button type="submit" id="saveButton" style="width: 100%; background: #3b82f6; color: white; border: none; padding: 0.875rem; 
+                                        border-radius: 8px; font-weight: 500; font-size: 1rem; cursor: pointer; transition: all 0.2s ease;"
+                                        onmouseover="this.style.backgroundColor='#2563eb'" 
+                                        onmouseout="this.style.backgroundColor='#3b82f6'"
+                                        onmousedown="this.style.transform='scale(0.98)'"
+                                        onmouseup="this.style.transform='scale(1)'">
+                                Save Changes
+                            </button>
+                            <a href="{% url 'accounts:profile' %}" style="width: 100%; background: white; color: #3b82f6; border: 1px solid #d1d5db; padding: 0.875rem; 
+                                        border-radius: 8px; font-weight: 500; font-size: 1rem; cursor: pointer; transition: all 0.2s ease; text-align: center; text-decoration: none;"
+                                        onmouseover="this.style.borderColor='#3b82f6'; this.style.backgroundColor='#f8fafc'" 
+                                        onmouseout="this.style.borderColor='#d1d5db'; this.style.backgroundColor='white'">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const darkModeText = document.getElementById('darkModeText');
+        const profileCard = document.getElementById('profileCard');
+        const cardBody = document.getElementById('cardBody');
+        const cardHeader = document.getElementById('cardHeader');
+        const saveButton = document.getElementById('saveButton');
+        
+        // Check system preference for dark mode
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const userPrefersDark = localStorage.getItem('darkMode') === 'enabled';
+        
+        if (userPrefersDark || (!localStorage.getItem('darkMode') && systemPrefersDark)) {
+            enableDarkMode();
+        }
+        
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', function() {
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        });
+        
+        // Avatar Preview
+        const avatarInput = document.getElementById('id_avatar');
+        const avatarPreview = document.getElementById('avatarPreview');
+        
+        avatarInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        function enableDarkMode() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('darkMode', 'enabled');
+            
+            // Update toggle button
+            darkModeIcon.textContent = '☀️';
+            darkModeText.textContent = 'Light Mode';
+            darkModeToggle.style.background = '#334155';
+            darkModeToggle.style.borderColor = '#475569';
+            darkModeToggle.style.color = '#f8fafc';
+            
+            // Update card styles
+            profileCard.style.background = '#1e293b';
+            profileCard.style.borderColor = '#334155';
+            profileCard.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+            
+            // Update card body
+            cardBody.style.background = '#1e293b';
+            cardBody.style.color = '#f8fafc';
+            
+            // Update form elements
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.style.backgroundColor = '#1e293b';
+                input.style.borderColor = '#334155';
+                input.style.color = '#f8fafc';
+            });
+            
+            // Update avatar border
+            avatarPreview.style.borderColor = '#475569';
+            
+            // Update labels
+            const labels = document.querySelectorAll('label');
+            labels.forEach(label => {
+                label.style.color = '#e2e8f0';
+            });
+            
+            // Update cancel button
+            const cancelButton = document.querySelector('a[href*="profile"]');
+            cancelButton.style.background = '#334155';
+            cancelButton.style.borderColor = '#475569';
+            cancelButton.style.color = '#f8fafc';
+        }
+        
+        function disableDarkMode() {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('darkMode', 'disabled');
+            
+            // Update toggle button
+            darkModeIcon.textContent = '🌙';
+            darkModeText.textContent = 'Dark Mode';
+            darkModeToggle.style.background = '#f1f5f9';
+            darkModeToggle.style.borderColor = '#e2e8f0';
+            darkModeToggle.style.color = '';
+            
+            // Revert card styles
+            profileCard.style.background = '#ffffff';
+            profileCard.style.borderColor = '#e2e8f0';
+            profileCard.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+            
+            // Revert card body
+            cardBody.style.background = '#ffffff';
+            cardBody.style.color = '';
+            
+            // Revert form elements
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.style.backgroundColor = '';
+                input.style.borderColor = '';
+                input.style.color = '';
+            });
+            
+            // Revert avatar border
+            avatarPreview.style.borderColor = '#e2e8f0';
+            
+            // Revert labels
+            const labels = document.querySelectorAll('label');
+            labels.forEach(label => {
+                label.style.color = '#4b5563';
+            });
+            
+            // Revert cancel button
+            const cancelButton = document.querySelector('a[href*="profile"]');
+            cancelButton.style.background = 'white';
+            cancelButton.style.borderColor = '#d1d5db';
+            cancelButton.style.color = '#3b82f6';
+        }
+    });
+</script>
+
+<style>
+    /* Keyframe animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Dark mode base styles */
+    [data-theme="dark"] {
+        background-color: #0f172a;
+        color: #f8fafc;
+    }
+    
+    /* Avatar upload button hover effect */
+    label[for="id_avatar"]:hover {
+        background: #2563eb !important;
+        transform: scale(1.1);
+        transition: all 0.2s ease;
+    }
+</style>
+{% endblock %}

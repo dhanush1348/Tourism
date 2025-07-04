@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Complete Your Booking</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Tour Details -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Tour Details</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="{{ tour.image }}" class="img-fluid rounded" alt="{{ tour.name }}">
+                            </div>
+                            <div class="col-md-8">
+                                <h6>{{ tour.name }}</h6>
+                                <p class="text-muted mb-2">{{ tour.description }}</p>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-primary fw-bold">${{ tour.price }}/person</span>
+                                    <span class="text-muted">{{ tour.duration_days }} days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Form -->
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <h5 class="mb-3">Payment Information</h5>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="cardName" class="form-label">Name on Card</label>
+                                <input type="text" class="form-control" id="cardName" required>
+                                <div class="invalid-feedback">
+                                    Please enter the name on your card.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="cardNumber" class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                                <div class="invalid-feedback">
+                                    Please enter your card number.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="expiryDate" class="form-label">Expiry Date</label>
+                                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                                <div class="invalid-feedback">
+                                    Please enter expiry date.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" placeholder="123" required>
+                                <div class="invalid-feedback">
+                                    Please enter CVV.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="guests" class="form-label">Number of Guests</label>
+                                <input type="number" class="form-control" id="guests" min="1" value="1" required>
+                                <div class="invalid-feedback">
+                                    Please enter number of guests.
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0">Total Amount</h5>
+                                <p class="text-muted mb-0">$<span id="totalAmount">{{ tour.price }}</span></p>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-lock me-2"></i>Pay Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+
+    // Calculate total amount based on number of guests
+    const guestsInput = document.getElementById('guests');
+    const totalAmountSpan = document.getElementById('totalAmount');
+    const basePrice = {{ tour.price }};
+
+    guestsInput.addEventListener('change', function() {
+        const total = basePrice * parseInt(this.value);
+        totalAmountSpan.textContent = total;
+    });
+});
+</script>
+{% endblock %} 

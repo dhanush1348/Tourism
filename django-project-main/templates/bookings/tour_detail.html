@@ -1,0 +1,202 @@
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ tour.name }} - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Tour Header -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h1 class="display-4 fw-bold mb-3">{{ tour.name }}</h1>
+            <div class="d-flex align-items-center mb-3">
+                <div class="text-warning me-3">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= tour.rating %}
+                            <i class="fas fa-star"></i>
+                        {% elif forloop.counter|add:"-0.5" <= tour.rating %}
+                            <i class="fas fa-star-half-alt"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <span class="text-muted ms-2">({{ tour.review_count }} reviews)</span>
+                </div>
+                <span class="badge bg-primary">{{ tour.category|title }}</span>
+            </div>
+            <p class="lead">{{ tour.description }}</p>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Tour Details</h4>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Duration:</span>
+                        <span>{{ tour.duration_days }} days</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Price:</span>
+                        <span class="text-primary fw-bold">${{ tour.price }}/person</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="text-muted">Available:</span>
+                        <span class="text-success">Yes</span>
+                    </div>
+                    <a href="{% url 'bookings:book_tour' tour.id %}" class="btn btn-primary w-100">
+                        <i class="fas fa-calendar-check me-2"></i> Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tour Gallery -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Tour Gallery</h2>
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <img src="{{ tour.image }}" class="img-fluid rounded" alt="{{ tour.name }}">
+                </div>
+                <div class="col-md-4">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <img src="{% static 'img/tour-gallery-1.jpg' %}" class="img-fluid rounded" alt="Gallery Image 1">
+                        </div>
+                        <div class="col-6">
+                            <img src="{% static 'img/tour-gallery-2.jpg' %}" class="img-fluid rounded" alt="Gallery Image 2">
+                        </div>
+                        <div class="col-6">
+                            <img src="{% static 'img/tour-gallery-3.jpg' %}" class="img-fluid rounded" alt="Gallery Image 3">
+                        </div>
+                        <div class="col-6">
+                            <img src="{% static 'img/tour-gallery-4.jpg' %}" class="img-fluid rounded" alt="Gallery Image 4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tour Itinerary -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Tour Itinerary</h2>
+            <div class="accordion" id="itineraryAccordion">
+                {% for day, activities in tour.itinerary.items %}
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="heading{{ forloop.counter }}">
+                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}">
+                            Day {{ forloop.counter }}: {{ day }}
+                        </button>
+                    </h3>
+                    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#itineraryAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-unstyled">
+                                {% for activity in activities %}
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-primary me-2"></i>
+                                    {{ activity }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Included/Excluded Services -->
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <h3 class="mb-4">Included Services</h3>
+            <ul class="list-unstyled">
+                {% for service in tour.included_services %}
+                <li class="mb-2">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    {{ service }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3 class="mb-4">Excluded Services</h3>
+            <ul class="list-unstyled">
+                {% for service in tour.excluded_services %}
+                <li class="mb-2">
+                    <i class="fas fa-times-circle text-danger me-2"></i>
+                    {{ service }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Book Now CTA -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="{% url 'bookings:book_tour' tour.id %}" class="btn btn-primary btn-lg px-5">
+                <i class="fas fa-calendar-check me-2"></i> Book This Tour
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-bottom: 20px;
+    }
+    
+    .timeline-marker {
+        position: absolute;
+        left: -30px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #0d6efd;
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 3px #0d6efd;
+    }
+    
+    .timeline-item:last-child {
+        padding-bottom: 0;
+    }
+    
+    .timeline-item:not(:last-child):before {
+        content: '';
+        position: absolute;
+        left: -21px;
+        top: 20px;
+        bottom: 0;
+        width: 2px;
+        background: #e9ecef;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const numPeopleInput = document.getElementById('num_people');
+    const totalPeopleSpan = document.getElementById('total_people');
+    const totalPriceSpan = document.getElementById('total_price');
+    const pricePerPerson = {{ tour.price }};
+    
+    numPeopleInput.addEventListener('change', function() {
+        const numPeople = parseInt(this.value);
+        totalPeopleSpan.textContent = numPeople;
+        totalPriceSpan.textContent = '$' + (pricePerPerson * numPeople);
+    });
+});
+</script>
+{% endblock %} {% endcomment %}

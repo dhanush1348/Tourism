@@ -1,0 +1,835 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contact Us - Tours & Travels{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="contact-hero py-5 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Let's Plan Your Next Adventure</h1>
+                <p class="lead mb-4">Our travel experts are ready to help you create unforgettable memories. Reach out to us anytime!</p>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-phone-alt fa-lg me-3"></i>
+                    <div>
+                        <p class="mb-0">24/7 Customer Support</p>
+                        <h4 class="mb-0">+1 (800) 555-ADVENTURE</h4>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-envelope fa-lg me-3"></i>
+                    <div>
+                        <p class="mb-0">Email Us Anytime</p>
+                        <h4 class="mb-0">contact@adventuretours.com</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="{% static 'images/contact-hero.jpg' %}" alt="Travel Adventure" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Options -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How Would You Like To Reach Us?</h2>
+            <p class="text-muted">Choose your preferred method of communication</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Live Chat -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-primary text-white mb-4 mx-auto">
+                            <i class="fas fa-comment-dots fa-2x"></i>
+                        </div>
+                        <h4 class="mb-3">Live Chat</h4>
+                        <p class="text-muted mb-4">Chat instantly with our travel specialists for quick answers to your questions.</p>
+                        <button class="btn btn-outline-primary px-4">Start Chat</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Call Us -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-success text-white mb-4 mx-auto">
+                            <i class="fas fa-phone-alt fa-2x"></i>
+                        </div>
+                        <h4 class="mb-3">Call Us</h4>
+                        <p class="text-muted mb-4">Speak directly with our travel consultants for personalized service.</p>
+                        <a href="tel:+18005552368" class="btn btn-outline-success px-4">Call Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visit Office -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-info text-white mb-4 mx-auto">
+                            <i class="fas fa-map-marker-alt fa-2x"></i>
+                        </div>
+                        <h4 class="mb-3">Visit Us</h4>
+                        <p class="text-muted mb-4">Schedule an appointment at our office for face-to-face travel planning.</p>
+                        <button class="btn btn-outline-info px-4">Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Form -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <h2 class="fw-bold mb-4">Send Us a Message</h2>
+                        <p class="text-muted mb-4">Fill out the form below and we'll get back to you within 24 hours.</p>
+                        
+                        <form method="post" hx-post="{% url 'contact' %}" hx-swap="outerHTML">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="John Smith" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="subject" class="form-label">Subject *</label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="" selected disabled>Select a topic</option>
+                                        <option value="General Inquiry">General Inquiry</option>
+                                        <option value="Booking Assistance">Booking Assistance</option>
+                                        <option value="Custom Tour Request">Custom Tour Request</option>
+                                        <option value="Feedback">Feedback</option>
+                                        <option value="Complaint">Complaint</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="message" class="form-label">Your Message *</label>
+                                    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us about your travel plans..." required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter" checked>
+                                        <label class="form-check-label" for="newsletter">
+                                            Subscribe to our newsletter for travel tips and exclusive deals
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                                        <i class="fas fa-paper-plane me-2"></i> Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="col-lg-5">
+                <div class="sticky-top" style="top: 20px;">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h3 class="fw-bold mb-4">Contact Information</h3>
+                            <div class="d-flex mb-4">
+                                <div class="icon-circle-sm bg-primary text-white me-3 flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-1">Our Headquarters</h5>
+                                    <p class="mb-0">123 Adventure Lane<br>Travel City, TC 12345<br>United States</p>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-4">
+                                <div class="icon-circle-sm bg-success text-white me-3 flex-shrink-0">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-1">Phone Numbers</h5>
+                                    <p class="mb-1">Sales: <a href="tel:+18005552368" class="text-decoration-none">+1 (800) 555-2368</a></p>
+                                    <p class="mb-0">Support: <a href="tel:+18005552369" class="text-decoration-none">+1 (800) 555-2369</a></p>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-4">
+                                <div class="icon-circle-sm bg-info text-white me-3 flex-shrink-0">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-1">Email Addresses</h5>
+                                    <p class="mb-1">General: <a href="mailto:info@adventuretours.com" class="text-decoration-none">info@adventuretours.com</a></p>
+                                    <p class="mb-0">Support: <a href="mailto:support@adventuretours.com" class="text-decoration-none">support@adventuretours.com</a></p>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="icon-circle-sm bg-warning text-white me-3 flex-shrink-0">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-1">Business Hours</h5>
+                                    <p class="mb-1">Monday-Friday: 8:00 AM - 8:00 PM EST</p>
+                                    <p class="mb-0">Saturday-Sunday: 9:00 AM - 6:00 PM EST</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h3 class="fw-bold mb-4">Follow Our Adventures</h3>
+                            <p class="text-muted mb-4">Join our community of travel enthusiasts and get inspired for your next journey.</p>
+                            
+                            <div class="social-links d-flex justify-content-center">
+                                <a href="#" class="btn btn-icon btn-outline-primary rounded-circle me-2">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="btn btn-icon btn-outline-info rounded-circle me-2">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="btn btn-icon btn-outline-danger rounded-circle me-2">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="btn btn-icon btn-outline-primary rounded-circle me-2">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="btn btn-icon btn-outline-danger rounded-circle">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h5 class="fw-bold mb-3">#AdventureTours</h5>
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <img src="{% static 'images/social-1.jpg' %}" alt="Instagram" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-4">
+                                        <img src="{% static 'images/social-2.jpg' %}" alt="Instagram" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-4">
+                                        <img src="{% static 'images/social-3.jpg' %}" alt="Instagram" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-4">
+                                        <img src="{% static 'images/social-4.jpg' %}" alt="Instagram" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-4">
+                                        <img src="{% static 'images/social-5.jpg' %}" alt="Instagram" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-4">
+                                        <img src="{% static 'images/social-6.jpg' %}" alt="Instagram" class="img-fluid rounded">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map & Locations Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Our Global Offices</h2>
+            <p class="text-muted">We have offices worldwide to serve you better</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Headquarters -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="icon-circle-sm bg-primary text-white me-3 flex-shrink-0">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div>
+                                <h4 class="mb-1">Headquarters</h4>
+                                <p class="text-muted mb-2">New York, USA</p>
+                            </div>
+                        </div>
+                        <p class="mb-3"><i class="fas fa-map-marker-alt text-primary me-2"></i> 123 Adventure Lane, Travel City, TC 12345</p>
+                        <p class="mb-3"><i class="fas fa-phone-alt text-primary me-2"></i> +1 (800) 555-2368</p>
+                        <p class="mb-0"><i class="fas fa-envelope text-primary me-2"></i> ny-office@adventuretours.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Europe Office -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="icon-circle-sm bg-success text-white me-3 flex-shrink-0">
+                                <i class="fas fa-globe-europe"></i>
+                            </div>
+                            <div>
+                                <h4 class="mb-1">Europe Office</h4>
+                                <p class="text-muted mb-2">Paris, France</p>
+                            </div>
+                        </div>
+                        <p class="mb-3"><i class="fas fa-map-marker-alt text-success me-2"></i> 45 Rue de Voyage, 75008 Paris</p>
+                        <p class="mb-3"><i class="fas fa-phone-alt text-success me-2"></i> +33 1 23 45 67 89</p>
+                        <p class="mb-0"><i class="fas fa-envelope text-success me-2"></i> europe@adventuretours.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Asia Office -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-effect">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="icon-circle-sm bg-warning text-white me-3 flex-shrink-0">
+                                <i class="fas fa-globe-asia"></i>
+                            </div>
+                            <div>
+                                <h4 class="mb-1">Asia Office</h4>
+                                <p class="text-muted mb-2">Bangkok, Thailand</p>
+                            </div>
+                        </div>
+                        <p class="mb-3"><i class="fas fa-map-marker-alt text-warning me-2"></i> 12/34 Travel Street, Pathum Wan, Bangkok 10330</p>
+                        <p class="mb-3"><i class="fas fa-phone-alt text-warning me-2"></i> +66 2 123 4567</p>
+                        <p class="mb-0"><i class="fas fa-envelope text-warning me-2"></i> asia@adventuretours.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Map -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="card border-0 shadow-sm overflow-hidden">
+            <div class="row g-0">
+                <div class="col-lg-4">
+                    <div class="card-body p-4">
+                        <h2 class="fw-bold mb-4">Find Our Nearest Office</h2>
+                        <div class="list-group office-list">
+                            <a href="#" class="list-group-item list-group-item-action active" data-lat="40.7128" data-lng="-74.0060">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">New York Headquarters</h5>
+                                    <small>Main Office</small>
+                                </div>
+                                <p class="mb-1">123 Adventure Lane, Travel City, TC 12345</p>
+                                <small>Open 8:00 AM - 8:00 PM EST</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action" data-lat="48.8566" data-lng="2.3522">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Paris Office</h5>
+                                    <small>Europe</small>
+                                </div>
+                                <p class="mb-1">45 Rue de Voyage, 75008 Paris</p>
+                                <small>Open 9:00 AM - 6:00 PM CET</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action" data-lat="13.7563" data-lng="100.5018">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Bangkok Office</h5>
+                                    <small>Asia</small>
+                                </div>
+                                <p class="mb-1">12/34 Travel Street, Pathum Wan, Bangkok</p>
+                                <small>Open 8:30 AM - 5:30 PM ICT</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action" data-lat="-33.8688" data-lng="151.2093">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Sydney Office</h5>
+                                    <small>Australia</small>
+                                </div>
+                                <p class="mb-1">78 Explorer Avenue, Sydney NSW 2000</p>
+                                <small>Open 9:00 AM - 5:30 PM AEST</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div id="map" style="height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Frequently Asked Questions</h2>
+            <p class="text-muted">Find quick answers to common questions</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-decoration-none w-100 text-start" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How quickly can I expect a response to my inquiry?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="faq1" class="collapse show">
+                        <div class="card-body pt-0">
+                            <p>We pride ourselves on quick responses! Our team typically replies to email inquiries within 24 hours during business days. For urgent matters, we recommend calling our 24/7 customer support line at +1 (800) 555-2368.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-decoration-none w-100 text-start collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What information should I include in my travel inquiry?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="faq2" class="collapse">
+                        <div class="card-body pt-0">
+                            <p>To help us provide the best recommendations, please include:</p>
+                            <ul>
+                                <li>Your desired destinations</li>
+                                <li>Travel dates or flexibility</li>
+                                <li>Number of travelers and their ages</li>
+                                <li>Budget range</li>
+                                <li>Special interests or requirements</li>
+                                <li>Any specific experiences you're looking for</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-decoration-none w-100 text-start collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Do you offer customized tour packages?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="faq3" class="collapse">
+                        <div class="card-body pt-0">
+                            <p>Absolutely! Customized tours are our specialty. Our travel experts will work with you to create a personalized itinerary that matches your interests, budget, and travel style. Just let us know your preferences through our contact form or schedule a consultation call.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-decoration-none w-100 text-start collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                What are your office hours for phone support?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="faq4" class="collapse">
+                        <div class="card-body pt-0">
+                            <p>Our main phone lines are open:</p>
+                            <ul>
+                                <li>Monday-Friday: 8:00 AM - 8:00 PM EST</li>
+                                <li>Saturday-Sunday: 9:00 AM - 6:00 PM EST</li>
+                            </ul>
+                            <p>For after-hours emergencies during international travel, our 24/7 support line (+1 (800) 555-2369) is always available.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-decoration-none w-100 text-start collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                How can I provide feedback about my recent trip?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="faq5" class="collapse">
+                        <div class="card-body pt-0">
+                            <p>We value your feedback! You can:</p>
+                            <ol>
+                                <li>Email us at feedback@adventuretours.com</li>
+                                <li>Complete our post-travel survey (sent automatically after your trip)</li>
+                                <li>Call our customer service line</li>
+                                <li>Leave a review on our social media pages</li>
+                            </ol>
+                            <p>We read all feedback carefully and use it to improve our services.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-decoration-none w-100 text-start collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                Do you have travel consultants who speak other languages?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="faq6" class="collapse">
+                        <div class="card-body pt-0">
+                            <p>Yes! Our team includes multilingual travel consultants fluent in:</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Spanish</li>
+                                        <li>French</li>
+                                        <li>German</li>
+                                        <li>Italian</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Mandarin</li>
+                                        <li>Japanese</li>
+                                        <li>Arabic</li>
+                                        <li>Russian</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p>When contacting us, please specify if you need assistance in a particular language.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold mb-3">Ready for Your Next Adventure?</h2>
+                <p class="lead mb-0">Contact us today to start planning your dream vacation with our expert travel consultants.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                <a href="tel:+18005552368" class="btn btn-light btn-lg px-4 me-2">
+                    <i class="fas fa-phone-alt me-2"></i> Call Now
+                </a>
+                <a href="#contact-form" class="btn btn-outline-light btn-lg px-4">
+                    <i class="fas fa-envelope me-2"></i> Email Us
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0062cc 0%, #33aeff 100%);
+    }
+    
+    .contact-hero {
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .icon-circle-sm {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .hover-effect {
+        transition: all 0.3s ease;
+    }
+    
+    .hover-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .office-list .list-group-item {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0 !important;
+        cursor: pointer;
+    }
+    
+    .office-list .list-group-item:first-child {
+        border-top: 0;
+    }
+    
+    .office-list .list-group-item.active {
+        background-color: #f8f9fa;
+        color: #212529;
+        border-color: rgba(0,0,0,.125);
+        border-left: 3px solid #0062cc;
+    }
+    
+    .btn-icon {
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+<script>
+    function initMap() {
+        // Default location (New York)
+        const defaultLocation = { lat: 40.7128, lng: -74.0060 };
+        
+        // Create map centered on default location
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 2,
+            center: defaultLocation,
+            styles: [
+                {
+                    "featureType": "administrative",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#444444"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "color": "#f2f2f2"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "saturation": -100
+                        },
+                        {
+                            "lightness": 45
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "simplified"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "color": "#4a8bc9"
+                        },
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                }
+            ]
+        });
+        
+        // Office locations with custom icons
+        const offices = [
+            {
+                position: { lat: 40.7128, lng: -74.0060 },
+                title: "New York Headquarters",
+                icon: {
+                    url: "{% static 'images/map-marker-blue.png' %}",
+                    scaledSize: new google.maps.Size(40, 40)
+                },
+                content: `
+                    <div class="map-info-window">
+                        <h5>New York Headquarters</h5>
+                        <p>123 Adventure Lane<br>Travel City, TC 12345</p>
+                        <a href="tel:+18005552368" class="text-primary">+1 (800) 555-2368</a>
+                    </div>
+                `
+            },
+            {
+                position: { lat: 48.8566, lng: 2.3522 },
+                title: "Paris Office",
+                icon: {
+                    url: "{% static 'images/map-marker-green.png' %}",
+                    scaledSize: new google.maps.Size(40, 40)
+                },
+                content: `
+                    <div class="map-info-window">
+                        <h5>Paris Office</h5>
+                        <p>45 Rue de Voyage<br>75008 Paris, France</p>
+                        <a href="tel:+33123456789" class="text-primary">+33 1 23 45 67 89</a>
+                    </div>
+                `
+            },
+            {
+                position: { lat: 13.7563, lng: 100.5018 },
+                title: "Bangkok Office",
+                icon: {
+                    url: "{% static 'images/map-marker-orange.png' %}",
+                    scaledSize: new google.maps.Size(40, 40)
+                },
+                content: `
+                    <div class="map-info-window">
+                        <h5>Bangkok Office</h5>
+                        <p>12/34 Travel Street<br>Pathum Wan, Bangkok 10330</p>
+                        <a href="tel:+6621234567" class="text-primary">+66 2 123 4567</a>
+                    </div>
+                `
+            },
+            {
+                position: { lat: -33.8688, lng: 151.2093 },
+                title: "Sydney Office",
+                icon: {
+                    url: "{% static 'images/map-marker-red.png' %}",
+                    scaledSize: new google.maps.Size(40, 40)
+                },
+                content: `
+                    <div class="map-info-window">
+                        <h5>Sydney Office</h5>
+                        <p>78 Explorer Avenue<br>Sydney NSW 2000, Australia</p>
+                        <a href="tel:+61212345678" class="text-primary">+61 2 1234 5678</a>
+                    </div>
+                `
+            }
+        ];
+        
+        // Create markers and info windows
+        const markers = [];
+        const infoWindows = [];
+        
+        offices.forEach(office => {
+            const marker = new google.maps.Marker({
+                position: office.position,
+                map: map,
+                title: office.title,
+                icon: office.icon
+            });
+            
+            const infoWindow = new google.maps.InfoWindow({
+                content: office.content
+            });
+            
+            marker.addListener('click', () => {
+                // Close all other info windows
+                infoWindows.forEach(iw => iw.close());
+                infoWindow.open(map, marker);
+                map.setCenter(marker.getPosition());
+                map.setZoom(12);
+            });
+            
+            markers.push(marker);
+            infoWindows.push(infoWindow);
+        });
+        
+        // Handle office list clicks
+        document.querySelectorAll('.office-list a').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get coordinates from data attributes
+                const lat = parseFloat(this.dataset.lat);
+                const lng = parseFloat(this.dataset.lng);
+                
+                // Find corresponding marker
+                const officeIndex = offices.findIndex(office => 
+                    office.position.lat === lat && office.position.lng === lng
+                );
+                
+                if (officeIndex !== -1) {
+                    // Close all info windows
+                    infoWindows.forEach(iw => iw.close());
+                    
+                    // Open the corresponding info window
+                    infoWindows[officeIndex].open(map, markers[officeIndex]);
+                    map.setCenter(markers[officeIndex].getPosition());
+                    map.setZoom(12);
+                    
+                    // Update active state in list
+                    document.querySelectorAll('.office-list a').forEach(a => {
+                        a.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+    }
+    
+    // Initialize Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}

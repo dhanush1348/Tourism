@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tours & Travels - Discover Your Next Adventure{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative">
+    <div class="hero-image" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% static 'img/hero-bg.jpg' %}') no-repeat center center; background-size: cover; height: 600px;">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-md-8 mx-auto text-center text-white">
+                    <h1 class="display-4 mb-4" style="font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Discover Your Next Adventure</h1>
+                    <p class="lead mb-5" style="font-size: 1.25rem; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">Explore amazing destinations with our curated tours and travel packages</p>
+                    
+                    <!-- Search Form -->
+                    <div class="search-form bg-white p-4 rounded shadow" style="max-width: 800px; margin: 0 auto;">
+                        <form action="{% url 'tours:search' %}" method="get">
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-map-marker-alt text-muted"></i>
+                                        </span>
+                                        <input type="text" name="destination" class="form-control border-start-0" placeholder="Where to?" style="padding-left: 0;">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-calendar text-muted"></i>
+                                        </span>
+                                        <input type="date" name="date" class="form-control border-start-0" placeholder="When?" style="padding-left: 0;">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-umbrella-beach text-muted"></i>
+                                        </span>
+                                        <select name="category" class="form-select border-start-0" style="padding-left: 0;">
+                                            <option value="">Tour Type</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.slug }}">{{ category.name }}</option>
+                                            {% empty %}
+                                                <option value="adventure">Adventure</option>
+                                                <option value="cultural">Cultural</option>
+                                                <option value="beach">Beach</option>
+                                                <option value="wildlife">Wildlife</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100" style="height: 100%;">
+                                        <i class="fas fa-search me-1"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Destinations -->
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0" style="font-weight: 600;">Popular Destinations</h2>
+            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+        <div class="row g-4">
+            {% for destination in featured_destinations|default:destinations_sample %}
+            <div class="col-md-4">
+                <div class="card destination-card h-100 border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
+                    <div style="height: 250px; overflow: hidden;">
+                        <img src="{% if destination.image %}{{ destination.image.url }}{% else %}https://source.unsplash.com/random/600x400/?{{ destination.name }}{% endif %}" 
+                             class="card-img-top h-100 w-100 object-cover" alt="{{ destination.name }}">
+                    </div>
+                    <div class="card-body position-relative" style="z-index: 2;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="card-title mb-1">{{ destination.name|default:"Bali, Indonesia" }}</h5>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-map-marker-alt me-1"></i> {{ destination.country|default:"Indonesia" }}
+                                </p>
+                            </div>
+                            <span class="badge bg-primary">Popular</span>
+                        </div>
+                        <p class="card-text text-muted small">{{ destination.description|default:"Known for its volcanic mountains, iconic rice paddies, beaches and coral reefs."|truncatewords:15 }}</p>
+                        <a href="{% url 'tours:destination' destination.slug|default:'bali' %}" class="btn btn-sm btn-outline-primary w-100 mt-2">Explore</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Tours -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0" style="font-weight: 600;">Featured Tours</h2>
+            <a href="{% url 'tours:list' %}" class="btn btn-sm btn-outline-primary">View All Tours</a>
+        </div>
+        <div class="row g-4">
+            {% for tour in featured_tours|default:tours_sample %}
+            <div class="col-md-4">
+                <div class="card tour-card h-100 border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
+                    <div class="position-relative">
+                        <div style="height: 200px; overflow: hidden;">
+                            <img src="{% if tour.featured_image %}{{ tour.featured_image.url }}{% else %}https://source.unsplash.com/random/600x400/?tour,{{ tour.name }}{% endif %}" 
+                                 class="card-img-top h-100 w-100 object-cover" alt="{{ tour.name }}">
+                        </div>
+                        {% if tour.discount_price %}
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-2">Sale</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{ tour.name|default:"Bali Cultural Experience" }}</h5>
+                            <div class="rating bg-primary text-white px-2 py-1 rounded" style="font-size: 0.8rem;">
+                                <i class="fas fa-star"></i> {{ tour.get_rating|default:4.5|floatformat:1 }}
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-3">
+                            <i class="fas fa-map-marker-alt me-1"></i> 
+                            {{ tour.destination.name|default:"Bali" }}, {{ tour.destination.country|default:"Indonesia" }}
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                {% if tour.discount_price %}
+                                    <span class="text-danger fw-bold">${{ tour.discount_price|default:299 }}</span>
+                                    <small class="text-muted text-decoration-line-through ms-1">${{ tour.price|default:399 }}</small>
+                                {% else %}
+                                    <span class="fw-bold">${{ tour.price|default:399 }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="text-muted small">
+                                <i class="fas fa-clock me-1"></i> {{ tour.duration_days|default:7 }} days
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between small text-muted mb-3">
+                            <div><i class="fas fa-users me-1"></i> Max {{ tour.group_size_max|default:12 }} people</div>
+                            <div><i class="fas fa-calendar me-1"></i> {{ tour.departures|default:"Monthly" }}</div>
+                        </div>
+                        
+                        <a href="{% url 'tours:detail' tour.slug|default:'bali-cultural-experience' %}" class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <h2 class="text-center mb-5" style="font-weight: 600;">Why Choose Us</h2>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="feature-box p-4 h-100 bg-white rounded shadow-sm">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-globe-americas fa-2x"></i>
+                    </div>
+                    <h4 class="mb-3">Expert Local Guides</h4>
+                    <p class="text-muted mb-0">Our experienced guides know the destinations inside out and provide authentic experiences that go beyond typical tourist routes.</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-box p-4 h-100 bg-white rounded shadow-sm">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                    </div>
+                    <h4 class="mb-3">Best Price Guarantee</h4>
+                    <p class="text-muted mb-0">We offer competitive prices and guarantee the best value for your money. Found a better deal? We'll match it!</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-box p-4 h-100 bg-white rounded shadow-sm">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-headset fa-2x"></i>
+                    </div>
+                    <h4 class="mb-3">24/7 Support</h4>
+                    <p class="text-muted mb-0">Our dedicated customer support team is available around the clock to assist you with any questions or concerns during your travels.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5" style="font-weight: 600;">What Our Travelers Say</h2>
+        <div class="row g-4">
+            {% for testimonial in testimonials|default:testimonials_sample %}
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: 12px;">
+                    <div class="d-flex mb-3">
+                        <img src="{% if testimonial.avatar %}{{ testimonial.avatar.url }}{% else %}https://i.pravatar.cc/100?img={{ forloop.counter }}{% endif %}" 
+                             class="rounded-circle me-3" width="60" height="60" alt="{{ testimonial.name }}">
+                        <div>
+                            <h5 class="mb-1">{{ testimonial.name|default:"Sarah Johnson" }}</h5>
+                            <div class="text-warning small">
+                                {% with rating=testimonial.rating|default:5 %}
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                            <small class="text-muted">{{ testimonial.location|default:"New York, USA" }}</small>
+                        </div>
+                    </div>
+                    <p class="card-text text-muted">"{{ testimonial.comment|default:"The Bali tour was absolutely amazing! Our guide Made was incredibly knowledgeable and showed us hidden gems we would never have found on our own. The accommodations were perfect and the itinerary was well-paced. Can't wait to book our next adventure!" }}"</p>
+                    <small class="text-muted">{{ testimonial.date|default:"2 weeks ago" }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h3 class="mb-2">Get Travel Inspiration</h3>
+                <p class="mb-0 opacity-75">Subscribe to our newsletter for exclusive deals, travel tips, and destination highlights.</p>
+            </div>
+            <div class="col-lg-6">
+                <form class="row g-2" hx-post="{% url 'subscribe_newsletter' %}" hx-swap="outerHTML">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white text-primary border-end-0">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" name="email" class="form-control border-start-0" placeholder="Your email address" style="padding-left: 0;">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-light w-100">
+                            Subscribe
+                        </button>
+                    </div>
+                </form>
+                <div class="form-text text-white opacity-75 mt-2">We respect your privacy. Unsubscribe at any time.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Activities -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5" style="font-weight: 600;">Popular Activities</h2>
+        <div class="row g-3">
+            {% for activity in activities|default:activities_sample %}
+            <div class="col-6 col-md-3">
+                <div class="card activity-card border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
+                    <div style="height: 120px; overflow: hidden;">
+                        <img src="{% if activity.image %}{{ activity.image.url }}{% else %}https://source.unsplash.com/random/300x200/?{{ activity.name }}{% endif %}" 
+                             class="card-img-top h-100 w-100 object-cover" alt="{{ activity.name }}">
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title mb-0">{{ activity.name|default:"Scuba Diving" }}</h5>
+                        <small class="text-muted">{{ activity.tour_count|default:12 }} tours</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize date picker with minimum date as today
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.querySelector('input[name="date"]');
+        if (dateInput) {
+            dateInput.min = new Date().toISOString().split('T')[0];
+        }
+        
+        // Sample data for demonstration
+        const destinations_sample = [
+            {
+                name: "Bali",
+                country: "Indonesia",
+                description: "Known for its volcanic mountains, iconic rice paddies, beaches and coral reefs.",
+                image: "https://source.unsplash.com/random/600x400/?bali"
+            },
+            {
+                name: "Kyoto",
+                country: "Japan",
+                description: "Famous for its numerous classical Buddhist temples, gardens, and traditional wooden houses.",
+                image: "https://source.unsplash.com/random/600x400/?kyoto"
+            },
+            {
+                name: "Santorini",
+                country: "Greece",
+                description: "Renowned for its dramatic views, stunning sunsets, and white-washed buildings.",
+                image: "https://source.unsplash.com/random/600x400/?santorini"
+            }
+        ];
+        
+        const tours_sample = [
+            {
+                name: "Bali Cultural Experience",
+                destination: { name: "Bali", country: "Indonesia" },
+                featured_image: "https://source.unsplash.com/random/600x400/?bali-tour",
+                price: 399,
+                discount_price: 299,
+                duration_days: 7,
+                group_size_max: 12,
+                departures: "Monthly",
+                get_rating: 4.5
+            },
+            {
+                name: "Japanese Heritage Tour",
+                destination: { name: "Kyoto", country: "Japan" },
+                featured_image: "https://source.unsplash.com/random/600x400/?kyoto-tour",
+                price: 899,
+                duration_days: 10,
+                group_size_max: 8,
+                departures: "Bi-Monthly",
+                get_rating: 4.8
+            },
+            {
+                name: "Greek Island Hopping",
+                destination: { name: "Santorini", country: "Greece" },
+                featured_image: "https://source.unsplash.com/random/600x400/?santorini-tour",
+                price: 799,
+                discount_price: 699,
+                duration_days: 8,
+                group_size_max: 15,
+                departures: "Weekly",
+                get_rating: 4.7
+            }
+        ];
+        
+        const testimonials_sample = [
+            {
+                name: "Sarah Johnson",
+                rating: 5,
+                location: "New York, USA",
+                comment: "The Bali tour was absolutely amazing! Our guide Made was incredibly knowledgeable and showed us hidden gems we would never have found on our own.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "Michael Chen",
+                rating: 4,
+                location: "Toronto, Canada",
+                comment: "Excellent itinerary and well-organized. The accommodations were perfect and the food was delicious throughout our Japan tour.",
+                date: "1 month ago"
+            },
+            {
+                name: "Emma Wilson",
+                rating: 5,
+                location: "London, UK",
+                comment: "The Greek Islands tour exceeded all our expectations. Every detail was taken care of, allowing us to fully enjoy the experience.",
+                date: "3 weeks ago"
+            }
+        ];
+        
+        const activities_sample = [
+            { name: "Hiking", tour_count: 24 },
+            { name: "Scuba Diving", tour_count: 18 },
+            { name: "Cultural Tours", tour_count: 32 },
+            { name: "Food Tours", tour_count: 15 },
+            { name: "Wildlife Safari", tour_count: 12 },
+            { name: "Beach Relaxation", tour_count: 28 },
+            { name: "City Exploration", tour_count: 22 },
+            { name: "Adventure Sports", tour_count: 16 }
+        ];
+    });
+</script>
+{% endblock %}

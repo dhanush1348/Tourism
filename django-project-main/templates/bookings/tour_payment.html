@@ -1,0 +1,569 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Secure Payment - Tours & Travels{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/payment.css' %}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    .payment-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2.5rem;
+        position: relative;
+    }
+    
+    .payment-steps::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #e9ecef;
+        z-index: 1;
+    }
+    
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        border: 3px solid white;
+    }
+    
+    .step-label {
+        font-size: 0.875rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+    
+    .step.active .step-number {
+        background-color: #0d6efd;
+        color: white;
+    }
+    
+    .step.active .step-label {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+    
+    .step.completed .step-number {
+        background-color: #198754;
+        color: white;
+    }
+    
+    .step.completed .step-label {
+        color: #198754;
+    }
+    
+    .card-highlight {
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .payment-method-card {
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+    
+    .payment-method-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .payment-method-card.selected {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+    
+    .card-number-group {
+        position: relative;
+    }
+    
+    .card-icons {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .card-icon {
+        width: 40px;
+        margin-left: 5px;
+    }
+    
+    @media (max-width: 768px) {
+        .step-label {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Payment Progress Steps -->
+    <div class="payment-steps">
+        <div class="step completed">
+            <div class="step-number">1</div>
+            <div class="step-label">Tour Selection</div>
+        </div>
+        <div class="step active">
+            <div class="step-number">2</div>
+            <div class="step-label">Payment Details</div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-label">Confirmation</div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Tour Summary Card -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm h-100 card-highlight">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0"><i class="fas fa-receipt me-2"></i> Order Summary</h4>
+                </div>
+                <div class="card-body">
+                    <div id="tour-summary-placeholder" class="text-center py-5">
+                        <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                        <h5>No tour selected</h5>
+                        <p class="text-muted">Please select a tour package from the options</p>
+                    </div>
+                    
+                    <div id="tour-summary" style="display: none;">
+                        <div class="d-flex mb-4">
+                            <img id="summary-tour-image" src="" class="rounded-3 me-3" width="100" height="80" style="object-fit: cover;">
+                            <div>
+                                <h5 id="summary-tour-name"></h5>
+                                <div class="d-flex align-items-center text-warning small mb-1">
+                                    <span id="summary-tour-rating"></span>
+                                    <span class="text-muted ms-2" id="summary-tour-reviews"></span>
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="fas fa-clock me-1"></i>
+                                    <span id="summary-tour-duration"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h6 class="mb-3">Booking Details</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Travelers:</span>
+                            <span id="summary-travelers">1</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Tour Price:</span>
+                            <span id="summary-base-price">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Tax (10%):</span>
+                            <span id="summary-tax">$0.00</span>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between fw-bold fs-5">
+                            <span>Total:</span>
+                            <span id="summary-total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Payment Form Card -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0"><i class="fas fa-credit-card me-2"></i> Payment Information</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="payment-form" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Tour Selection -->
+                        <div class="mb-4">
+                            <label for="tour_package" class="form-label fw-bold">Select Tour Package</label>
+                            <select class="form-select form-select-lg" id="tour_package" name="tour_package" required>
+                                <option value="" selected disabled>Choose a package</option>
+                                <option value="1" data-price="799" data-image="{% static 'img/tour-italy.jpg' %}" 
+                                    data-rating="4.5" data-reviews="24" data-duration="10 days" 
+                                    data-description="Experience the art, history, and cuisine of Italy's most iconic cities on this 10-day cultural journey.">
+                                    Bali Adventure - $799
+                                </option>
+                                <option value="2" data-price="1299" data-image="{% static 'img/tour-japan.jpg' %}" 
+                                    data-rating="5" data-reviews="32" data-duration="12 days"
+                                    data-description="Immerse yourself in Japan's rich traditions from ancient temples to modern cities on this 12-day exploration.">
+                                    European Explorer - $1299
+                                </option>
+                                <option value="3" data-price="1599" data-image="{% static 'img/tour-bali.jpg' %}" 
+                                    data-rating="4" data-reviews="18" data-duration="8 days"
+                                    data-description="Relax and rejuvenate with this 8-day luxury retreat featuring private villas, spa treatments, and cultural experiences.">
+                                    Japan Cultural Journey - $1599
+                                </option>
+                                <option value="4" data-price="999" data-image="{% static 'img/tour-peru.jpg' %}" 
+                                    data-rating="5" data-reviews="27" data-duration="14 days"
+                                    data-description="Trek through the Andes and explore ancient Incan ruins on this 14-day adventure tour.">
+                                    Thai Beaches Getaway - $999
+                                </option>
+                                <option value="5" data-price="2299" data-image="{% static 'img/tour-safari.jpg' %}" 
+                                    data-rating="4.5" data-reviews="21" data-duration="7 days"
+                                    data-description="Experience the thrill of spotting the Big Five on this 7-day luxury safari with expert guides.">
+                                    African Safari - $2299
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a tour package.
+                            </div>
+                        </div>
+                        
+                        <!-- Number of People -->
+                        <div class="mb-4">
+                            <label for="number_of_people" class="form-label fw-bold">Number of Travelers</label>
+                            <input type="number" class="form-control form-control-lg" id="number_of_people" 
+                                   name="number_of_people" min="1" max="10" value="1" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid number between 1 and 10.
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Method Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block mb-3">Payment Method</label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="payment-method-card p-3 rounded-3" data-method="credit_card">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" 
+                                                   id="credit_card" value="credit_card" checked required>
+                                            <label class="form-check-label fw-bold" for="credit_card">
+                                                <i class="far fa-credit-card me-2"></i> Credit Card
+                                            </label>
+                                        </div>
+                                        <div class="mt-2 d-flex">
+                                            <img src="{% static 'img/visa.png' %}" width="40" class="me-2">
+                                            <img src="{% static 'img/mastercard.png' %}" width="40" class="me-2">
+                                            <img src="{% static 'img/amex.png' %}" width="40">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="payment-method-card p-3 rounded-3" data-method="paypal">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" 
+                                                   id="paypal" value="paypal" required>
+                                            <label class="form-check-label fw-bold" for="paypal">
+                                                <i class="fab fa-paypal me-2"></i> PayPal
+                                            </label>
+                                        </div>
+                                        <img src="{% static 'img/paypal.png' %}" width="80" class="mt-2">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="payment-method-card p-3 rounded-3" data-method="bank_transfer">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" 
+                                                   id="bank_transfer" value="bank_transfer" required>
+                                            <label class="form-check-label fw-bold" for="bank_transfer">
+                                                <i class="fas fa-university me-2"></i> Bank Transfer
+                                            </label>
+                                        </div>
+                                        <div class="text-muted small mt-2">
+                                            Direct transfer to our bank account
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Credit Card Details -->
+                        <div id="credit-card-details">
+                            <div class="mb-4">
+                                <label for="card_number" class="form-label fw-bold">Card Number</label>
+                                <div class="card-number-group">
+                                    <input type="text" class="form-control form-control-lg" id="card_number" 
+                                           name="card_number" placeholder="1234 5678 9012 3456" required>
+                                    <div class="card-icons">
+                                        <img src="{% static 'img/visa.png' %}" class="card-icon">
+                                        <img src="{% static 'img/mastercard.png' %}" class="card-icon">
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please enter a valid card number.
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="card_holder" class="form-label fw-bold">Card Holder Name</label>
+                                    <input type="text" class="form-control form-control-lg" id="card_holder" 
+                                           name="card_holder" placeholder="John Doe" required>
+                                    <div class="invalid-feedback">
+                                        Please enter the name on card.
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="expiry_date" class="form-label fw-bold">Expiry Date</label>
+                                    <input type="text" class="form-control form-control-lg" id="expiry_date" 
+                                           name="expiry_date" placeholder="MM/YY" required>
+                                    <div class="invalid-feedback">
+                                        Please enter expiry date.
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="cvv" class="form-label fw-bold">CVV</label>
+                                    <input type="text" class="form-control form-control-lg" id="cvv" 
+                                           name="cvv" placeholder="123" required>
+                                    <div class="invalid-feedback">
+                                        Please enter CVV.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- PayPal Notice (hidden by default) -->
+                        <div id="paypal-notice" class="alert alert-info d-none">
+                            <i class="fas fa-info-circle me-2"></i>
+                            You will be redirected to PayPal to complete your payment after submitting this form.
+                        </div>
+                        
+                        <!-- Bank Transfer Notice (hidden by default) -->
+                        <div id="bank-transfer-notice" class="alert alert-info d-none">
+                            <i class="fas fa-info-circle me-2"></i>
+                            After submitting, you'll receive our bank details to complete the transfer.
+                        </div>
+                        
+                        <!-- Terms and Conditions -->
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" type="checkbox" value="" id="terms" required>
+                                            <label class="form-check-label" for="terms">
+                                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a>
+                                            </label>
+                                        </div>
+                                        
+                                        <!-- Submit Button -->
+                                        <div class="d-grid mt-4">
+                                            <button type="submit" class="btn btn-primary btn-lg py-3">
+                                                <i class="fas fa-lock me-2"></i> Complete Payment
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms and Conditions Modal -->
+                <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h6>Booking Policy</h6>
+                                <p>All bookings are subject to availability. A deposit of 30% is required to secure your reservation. The balance is due 30 days before departure.</p>
+                                
+                                <h6 class="mt-4">Cancellation Policy</h6>
+                                <ul>
+                                    <li>More than 30 days before departure: Full refund minus $100 administration fee</li>
+                                    <li>15-30 days before departure: 50% refund</li>
+                                    <li>Less than 15 days before departure: No refund</li>
+                                </ul>
+                                
+                                <h6 class="mt-4">Travel Insurance</h6>
+                                <p>We strongly recommend that you purchase comprehensive travel insurance to cover cancellation, medical expenses, personal accident, personal baggage, money and public liability.</p>
+                                
+                                <h6 class="mt-4">Changes by Us</h6>
+                                <p>We reserve the right to change itineraries, accommodation or transportation should circumstances require. We will notify you of any significant changes as soon as possible.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endblock %}
+
+                {% block extra_js %}
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // DOM Elements
+                    const tourSelect = document.getElementById('tour_package');
+                    const numberOfPeople = document.getElementById('number_of_people');
+                    const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
+                    const paymentMethodCards = document.querySelectorAll('.payment-method-card');
+                    const creditCardDetails = document.getElementById('credit-card-details');
+                    const paypalNotice = document.getElementById('paypal-notice');
+                    const bankTransferNotice = document.getElementById('bank-transfer-notice');
+                    
+                    // Summary Elements
+                    const summaryPlaceholder = document.getElementById('tour-summary-placeholder');
+                    const summarySection = document.getElementById('tour-summary');
+                    const summaryTourImage = document.getElementById('summary-tour-image');
+                    const summaryTourName = document.getElementById('summary-tour-name');
+                    const summaryTourRating = document.getElementById('summary-tour-rating');
+                    const summaryTourReviews = document.getElementById('summary-tour-reviews');
+                    const summaryTourDuration = document.getElementById('summary-tour-duration');
+                    const summaryTravelers = document.getElementById('summary-travelers');
+                    const summaryBasePrice = document.getElementById('summary-base-price');
+                    const summaryTax = document.getElementById('summary-tax');
+                    const summaryTotal = document.getElementById('summary-total');
+                    
+                    // Payment method selection
+                    paymentMethodCards.forEach(card => {
+                        card.addEventListener('click', function() {
+                            // Update radio button
+                            const radio = this.querySelector('input[type="radio"]');
+                            radio.checked = true;
+                            
+                            // Update card styles
+                            paymentMethodCards.forEach(c => c.classList.remove('selected'));
+                            this.classList.add('selected');
+                            
+                            // Show/hide appropriate sections
+                            updatePaymentMethodDisplay();
+                        });
+                    });
+                    
+                    // Initialize payment method display
+                    updatePaymentMethodDisplay();
+                    
+                    // Tour selection change handler
+                    tourSelect.addEventListener('change', function() {
+                        const selectedOption = this.options[this.selectedIndex];
+                        
+                        if (selectedOption.value) {
+                            // Show summary section
+                            summaryPlaceholder.style.display = 'none';
+                            summarySection.style.display = 'block';
+                            
+                            // Update summary with tour details
+                            summaryTourImage.src = selectedOption.dataset.image;
+                            summaryTourName.textContent = selectedOption.text;
+                            
+                            // Create rating stars
+                            const rating = parseFloat(selectedOption.dataset.rating);
+                            summaryTourRating.innerHTML = '';
+                            for (let i = 1; i <= 5; i++) {
+                                const star = document.createElement('i');
+                                star.className = i <= rating ? 'fas fa-star' : 
+                                                 (i - 0.5 <= rating ? 'fas fa-star-half-alt' : 'far fa-star');
+                                summaryTourRating.appendChild(star);
+                            }
+                            
+                            summaryTourReviews.textContent = `(${selectedOption.dataset.reviews} reviews)`;
+                            summaryTourDuration.textContent = selectedOption.dataset.duration;
+                            
+                            // Calculate and update prices
+                            calculateAndUpdatePrices();
+                        } else {
+                            // Hide summary section
+                            summaryPlaceholder.style.display = 'block';
+                            summarySection.style.display = 'none';
+                        }
+                    });
+                    
+                    // Number of people change handler
+                    numberOfPeople.addEventListener('change', calculateAndUpdatePrices);
+                    
+                    // Calculate and update all prices
+                    function calculateAndUpdatePrices() {
+                        const selectedOption = tourSelect.options[tourSelect.selectedIndex];
+                        
+                        if (selectedOption && selectedOption.value) {
+                            const price = parseFloat(selectedOption.dataset.price);
+                            const people = parseInt(numberOfPeople.value) || 1;
+                            const subtotal = price * people;
+                            const tax = subtotal * 0.1; // 10% tax
+                            const total = subtotal + tax;
+                            
+                            // Update summary
+                            summaryTravelers.textContent = people;
+                            summaryBasePrice.textContent = `$${subtotal.toFixed(2)}`;
+                            summaryTax.textContent = `$${tax.toFixed(2)}`;
+                            summaryTotal.textContent = `$${total.toFixed(2)}`;
+                        }
+                    }
+                    
+                    // Update payment method display based on selection
+                    function updatePaymentMethodDisplay() {
+                        const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+                        
+                        // Hide all notices first
+                        creditCardDetails.style.display = 'none';
+                        paypalNotice.classList.add('d-none');
+                        bankTransferNotice.classList.add('d-none');
+                        
+                        // Show relevant section
+                        switch(selectedMethod) {
+                            case 'credit_card':
+                                creditCardDetails.style.display = 'block';
+                                break;
+                            case 'paypal':
+                                paypalNotice.classList.remove('d-none');
+                                break;
+                            case 'bank_transfer':
+                                bankTransferNotice.classList.remove('d-none');
+                                break;
+                        }
+                    }
+                    
+                    // Form validation
+                    const form = document.getElementById('payment-form');
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        
+                        form.classList.add('was-validated');
+                    }, false);
+                    
+                    // Initialize payment method cards
+                    document.querySelector('.payment-method-card[data-method="credit_card"]').classList.add('selected');
+                    
+                    // Credit card number formatting
+                    const cardNumber = document.getElementById('card_number');
+                    cardNumber.addEventListener('input', function(e) {
+                        let value = this.value.replace(/\s+/g, ''); // Remove all spaces
+                        if (value.length > 0) {
+                            value = value.match(new RegExp('.{1,4}', 'g')).join(' '); // Add space every 4 digits
+                        }
+                        this.value = value;
+                    });
+                    
+                    // Expiry date formatting
+                    const expiryDate = document.getElementById('expiry_date');
+                    expiryDate.addEventListener('input', function(e) {
+                        let value = this.value.replace(/\D/g, ''); // Remove non-digits
+                        if (value.length > 2) {
+                            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                        }
+                        this.value = value;
+                    });
+                });
+                </script>
+                {% endblock %}

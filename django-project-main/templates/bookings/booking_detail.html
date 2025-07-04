@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Booking Details - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="mb-4">Booking Details</h1>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ booking.tour.name }}</h5>
+                    <div class="booking-details">
+                        <p><strong>Booking ID:</strong> {{ booking.id }}</p>
+                        <p><strong>Status:</strong> <span class="badge bg-{{ booking.status|lower }}">{{ booking.status }}</span></p>
+                        <p><strong>Start Date:</strong> {{ booking.start_date }}</p>
+                        <p><strong>Number of People:</strong> {{ booking.num_people }}</p>
+                        <p><strong>Total Price:</strong> ${{ booking.total_price }}</p>
+                        {% if booking.special_requirements %}
+                        <p><strong>Special Requirements:</strong> {{ booking.special_requirements }}</p>
+                        {% endif %}
+                        <p><strong>Booked On:</strong> {{ booking.created_at }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            {% if booking.status == 'pending' %}
+            <div class="mt-4">
+                <a href="{% url 'bookings:payment' booking.id %}" class="btn btn-primary">Proceed to Payment</a>
+                <a href="{% url 'bookings:cancel_booking' booking.id %}" class="btn btn-danger">Cancel Booking</a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tour Information</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Destination:</strong> {{ booking.tour.destination.name }}</li>
+                        <li><strong>Duration:</strong> {{ booking.tour.duration_days }} days</li>
+                        <li><strong>Meeting Point:</strong> {{ booking.tour.meeting_point }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

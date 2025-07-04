@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment Successful - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <div class="card shadow-sm">
+                <div class="card-body py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h2 class="mb-3">Payment Successful!</h2>
+                    <p class="lead mb-4">Thank you for your booking. We've sent a confirmation email with your tour details.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'bookings:tour_list' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Tours
+                        </a>
+                        <a href="{% url 'bookings:my_bookings' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-ticket-alt me-2"></i>View My Bookings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment - Tours & Travels{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/payment.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Select Tour Package</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="payment-form">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="tour_package" class="form-label">Select Tour Package</label>
+                            <select class="form-select" id="tour_package" name="tour_package" required>
+                                <option value="" selected disabled>Choose a package</option>
+                                {% for tour in tours %}
+                                <option value="{{ tour.id }}" data-price="{{ tour.price }}">
+                                    {{ tour.name }} - ${{ tour.price }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="number_of_people" class="form-label">Number of People</label>
+                            <input type="number" class="form-control" id="number_of_people" name="number_of_people" min="1" value="1" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="total_amount" class="form-label">Total Amount</label>
+                            <input type="text" class="form-control" id="total_amount" readonly>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="payment_method" class="form-label">Payment Method</label>
+                            <select class="form-select" id="payment_method" name="payment_method" required>
+                                <option value="" selected disabled>Select payment method</option>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                            </select>
+                        </div>
+
+                        <div id="credit-card-details" class="d-none">
+                            <div class="mb-3">
+                                <label for="card_number" class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="card_number" name="card_number" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="expiry_date" class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" id="expiry_date" name="expiry_date" placeholder="MM/YY">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-lock me-2"></i>Proceed to Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tourSelect = document.getElementById('tour_package');
+        const numberOfPeople = document.getElementById('number_of_people');
+        const totalAmount = document.getElementById('total_amount');
+        const paymentMethod = document.getElementById('payment_method');
+        const creditCardDetails = document.getElementById('credit-card-details');
+
+        function calculateTotal() {
+            const selectedOption = tourSelect.options[tourSelect.selectedIndex];
+            const price = selectedOption ? parseFloat(selectedOption.dataset.price) : 0;
+            const people = parseInt(numberOfPeople.value) || 0;
+            const total = price * people;
+            totalAmount.value = `$${total.toFixed(2)}`;
+        }
+
+        tourSelect.addEventListener('change', calculateTotal);
+        numberOfPeople.addEventListener('input', calculateTotal);
+
+        paymentMethod.addEventListener('change', function() {
+            if (this.value === 'credit_card') {
+                creditCardDetails.classList.remove('d-none');
+            } else {
+                creditCardDetails.classList.add('d-none');
+            }
+        });
+    });
+</script>
+{% endblock %} 

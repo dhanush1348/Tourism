@@ -1,0 +1,1123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ destination.name }} - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <img src="{{ destination.image.url }}" class="card-img-top" alt="{{ destination.name }}" 
+                     style="height: 400px; object-fit: cover;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="h2 mb-0">{{ destination.name }}</h1>
+                        <span class="badge bg-primary">{{ destination.category.name }}</span>
+                    </div>
+                    <p class="lead text-muted">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ destination.city }}, {{ destination.country }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h4 mb-4">About {{ destination.name }}</h2>
+                    <p class="card-text">{{ destination.description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-4">Quick Info</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-tag me-2 text-primary"></i>
+                            <strong>Category:</strong> {{ destination.category.name }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-map me-2 text-primary"></i>
+                            <strong>Location:</strong> {{ destination.city }}, {{ destination.country }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-money-bill-wave me-2 text-primary"></i>
+                            <strong>Starting Price:</strong> ₹{{ destination.min_price }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Destinations -->
+    {% if related_destinations %}
+    <div class="row">
+        <div class="col-12">
+            <h2 class="h4 mb-4">Related Destinations</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                {% for related in related_destinations %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.name }}" 
+                             style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ related.name }}</h5>
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-map-marker-alt me-2"></i>{{ related.city }}, {{ related.country }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h6 mb-0">From ₹{{ related.min_price }}</span>
+                                <a href="{% url 'core:destination_detail' related.slug %}" class="btn btn-sm btn-outline-primary">
+                                    Explore
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Breadcrumb Navigation -->
+<nav aria-label="breadcrumb" class="bg-light py-3">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'destinations' %}">Destinations</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ destination.name }}</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- Destination Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Description Card -->
+                <div class="card shadow-sm mb-4 border-0">
+                    <div class="card-body p-4">
+                        <h2 class="h3 mb-4 fw-bold">Discover {{ destination.name }}</h2>
+                        <div class="destination-description mb-4">
+                            <p>{{ destination.description }}</p>
+                            <p>Experience breathtaking landscapes, rich cultural heritage, and unforgettable adventures in {{ destination.name }}. From ancient ruins to modern marvels, this destination offers something for every traveler.</p>
+                        </div>
+                        
+                        <!-- Highlights Section -->
+                        <div class="highlights-section mb-4">
+                            <h3 class="h5 mb-3 fw-bold"><i class="fas fa-bolt text-warning me-2"></i>Destination Highlights</h3>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-primary">
+                                            <i class="fas fa-umbrella-beach fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="h6 mb-1 fw-bold">Beautiful Beaches</h4>
+                                            <p class="small mb-0">Over 50km of pristine coastline with crystal clear waters</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-primary">
+                                            <i class="fas fa-utensils fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="h6 mb-1 fw-bold">Local Cuisine</h4>
+                                            <p class="small mb-0">Authentic dishes with fresh local ingredients</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-primary">
+                                            <i class="fas fa-hiking fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="h6 mb-1 fw-bold">Adventure Activities</h4>
+                                            <p class="small mb-0">Hiking, diving, and water sports available</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-primary">
+                                            <i class="fas fa-landmark fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="h6 mb-1 fw-bold">Cultural Heritage</h4>
+                                            <p class="small mb-0">UNESCO World Heritage sites and ancient temples</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Weather Widget -->
+                        <div class="weather-widget mb-4 p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="h6 mb-1 fw-bold">Current Weather</h3>
+                                    <p class="small mb-0">{{ destination.city }}, {{ destination.country }}</p>
+                                </div>
+                                <div class="text-end">
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <i class="fas fa-sun text-warning fs-2 me-2"></i>
+                                        <div>
+                                            <span class="h4 mb-0 fw-bold">28°C</span>
+                                            <p class="small mb-0">Sunny</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="weather-forecast mt-3">
+                                <div class="row g-2 text-center">
+                                    <div class="col">
+                                        <div class="p-2 bg-white rounded">
+                                            <p class="small mb-1 fw-bold">Mon</p>
+                                            <i class="fas fa-sun text-warning"></i>
+                                            <p class="small mb-0">27°C</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-2 bg-white rounded">
+                                            <p class="small mb-1 fw-bold">Tue</p>
+                                            <i class="fas fa-cloud-sun text-info"></i>
+                                            <p class="small mb-0">26°C</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-2 bg-white rounded">
+                                            <p class="small mb-1 fw-bold">Wed</p>
+                                            <i class="fas fa-sun text-warning"></i>
+                                            <p class="small mb-0">29°C</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-2 bg-white rounded">
+                                            <p class="small mb-1 fw-bold">Thu</p>
+                                            <i class="fas fa-cloud-rain text-primary"></i>
+                                            <p class="small mb-0">24°C</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-2 bg-white rounded">
+                                            <p class="small mb-1 fw-bold">Fri</p>
+                                            <i class="fas fa-sun text-warning"></i>
+                                            <p class="small mb-0">28°C</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Gallery Section -->
+                <div id="gallery" class="card shadow-sm mb-4 border-0">
+                    <div class="card-body p-4">
+                        <h2 class="h3 mb-4 fw-bold">Photo Gallery</h2>
+                        <div class="row g-3 gallery-grid">
+                            <div class="col-md-4">
+                                <a href="{% static 'images/destination-gallery-1.jpg' %}" data-fancybox="gallery" class="gallery-item">
+                                    <img src="{% static 'images/destination-gallery-1.jpg' %}" alt="Gallery Image 1" class="img-fluid rounded">
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{% static 'images/destination-gallery-2.jpg' %}" data-fancybox="gallery" class="gallery-item">
+                                    <img src="{% static 'images/destination-gallery-2.jpg' %}" alt="Gallery Image 2" class="img-fluid rounded">
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{% static 'images/destination-gallery-3.jpg' %}" data-fancybox="gallery" class="gallery-item">
+                                    <img src="{% static 'images/destination-gallery-3.jpg' %}" alt="Gallery Image 3" class="img-fluid rounded">
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="{% static 'images/destination-gallery-4.jpg' %}" data-fancybox="gallery" class="gallery-item">
+                                    <img src="{% static 'images/destination-gallery-4.jpg' %}" alt="Gallery Image 4" class="img-fluid rounded">
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="{% static 'images/destination-gallery-5.jpg' %}" data-fancybox="gallery" class="gallery-item">
+                                    <img src="{% static 'images/destination-gallery-5.jpg' %}" alt="Gallery Image 5" class="img-fluid rounded">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-outline-primary">View More Photos</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Tours -->
+                <div id="tours" class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="h3 mb-0 fw-bold">Available Tours</h2>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortToursDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sort By: Popular
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="sortToursDropdown">
+                                <li><a class="dropdown-item" href="#">Popular</a></li>
+                                <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
+                                <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+                                <li><a class="dropdown-item" href="#">Duration</a></li>
+                                <li><a class="dropdown-item" href="#">Rating</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    {% for tour in tours %}
+                    <div class="card tour-card mb-4 border-0 shadow-sm hover-shadow transition-all">
+                        <div class="row g-0">
+                            <div class="col-md-4 position-relative">
+                                <img src="{{ tour.featured_image.url }}" class="img-fluid rounded-start h-100 w-100" alt="{{ tour.name }}" style="object-fit: cover; min-height: 200px;">
+                                <div class="position-absolute top-0 start-0 m-2">
+                                    {% if tour.is_bestseller %}
+                                    <span class="badge bg-danger">Bestseller</span>
+                                    {% endif %}
+                                    {% if tour.is_new %}
+                                    <span class="badge bg-success">New</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between">
+                                        <h3 class="h5 card-title mb-2">{{ tour.name }}</h3>
+                                        <div class="save-tour">
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="far fa-heart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="rating small text-warning me-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <span class="text-muted ms-1 small">({{ tour.review_count|default:24 }} reviews)</span>
+                                        </div>
+                                    </div>
+                                    <p class="card-text text-muted small mb-3">{{ tour.description|truncatewords:25 }}</p>
+                                    <div class="tour-meta d-flex flex-wrap gap-2 mb-3">
+                                        <span class="badge bg-light text-dark">
+                                            <i class="fas fa-clock text-primary me-1"></i> {{ tour.duration_days }} days
+                                        </span>
+                                        <span class="badge bg-light text-dark">
+                                            <i class="fas fa-users text-primary me-1"></i> Max {{ tour.group_size_max }} people
+                                        </span>
+                                        <span class="badge bg-light text-dark">
+                                            <i class="fas fa-map-marker-alt text-primary me-1"></i> {{ tour.difficulty|default:"Easy" }}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="price-section">
+                                            <span class="h5 fw-bold text-primary mb-0">${{ tour.price }}</span>
+                                            {% if tour.discount_price %}
+                                            <span class="text-decoration-line-through text-muted ms-2 small">${{ tour.discount_price }}</span>
+                                            <span class="badge bg-danger ms-2 small">Save {{ tour.discount_percentage }}%</span>
+                                            {% endif %}
+                                            <p class="small text-muted mb-0">per person</p>
+                                        </div>
+                                        <a href="{% url 'bookings:tour_detail' tour.slug %}" class="btn btn-primary px-4">
+                                            View Tour <i class="fas fa-arrow-right ms-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-compass text-muted fs-1 mb-3"></i>
+                            <h3 class="h5 mb-2">No tours available</h3>
+                            <p class="text-muted mb-4">We don't have any tours for this destination at the moment.</p>
+                            <a href="{% url 'destinations' %}" class="btn btn-outline-primary">Explore Other Destinations</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Tour pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="card shadow-sm mb-4 border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="h3 mb-0 fw-bold">Traveler Reviews</h2>
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#writeReviewModal">
+                                <i class="fas fa-pen me-1"></i> Write a Review
+                            </button>
+                        </div>
+                        
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-3 text-center">
+                                <div class="rating-overview p-3 bg-light rounded">
+                                    <span class="display-4 fw-bold text-primary">4.8</span>
+                                    <div class="rating mb-2">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                    </div>
+                                    <p class="small mb-0">Based on 124 reviews</p>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="rating-bars">
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <span class="small me-2">5 <i class="fas fa-star text-warning"></i></span>
+                                        <div class="progress flex-grow-1" style="height: 8px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span class="small ms-2 text-muted">85%</span>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <span class="small me-2">4 <i class="fas fa-star text-warning"></i></span>
+                                        <div class="progress flex-grow-1" style="height: 8px;">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 12%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span class="small ms-2 text-muted">12%</span>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <span class="small me-2">3 <i class="fas fa-star text-warning"></i></span>
+                                        <div class="progress flex-grow-1" style="height: 8px;">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 2%" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span class="small ms-2 text-muted">2%</span>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center mb-2">
+                                        <span class="small me-2">2 <i class="fas fa-star text-warning"></i></span>
+                                        <div class="progress flex-grow-1" style="height: 8px;">
+                                            <div class="progress-bar bg-orange" role="progressbar" style="width: 1%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span class="small ms-2 text-muted">1%</span>
+                                    </div>
+                                    <div class="rating-item d-flex align-items-center">
+                                        <span class="small me-2">1 <i class="fas fa-star text-warning"></i></span>
+                                        <div class="progress flex-grow-1" style="height: 8px;">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span class="small ms-2 text-muted">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Review Items -->
+                        <div class="review-list">
+                            <div class="review-item border-bottom pb-4 mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <h4 class="h6 mb-0 fw-bold">Amazing experience!</h4>
+                                        <div class="rating small text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted small">2 weeks ago</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <img src="{% static 'images/user-avatar.jpg' %}" alt="User" class="rounded-circle me-2" width="32">
+                                    <span class="small fw-bold">Michael Johnson</span>
+                                </div>
+                                <p class="mb-2">This was one of the best trips I've ever taken. The guides were knowledgeable, the itinerary was perfect, and the scenery was breathtaking. I would definitely recommend this tour to anyone visiting the area.</p>
+                                <div class="review-photos d-flex gap-2">
+                                    <a href="{% static 'images/review-photo-1.jpg' %}" data-fancybox="review-gallery" class="review-photo-thumb">
+                                        <img src="{% static 'images/review-photo-1.jpg' %}" alt="Review photo" class="img-fluid rounded" width="60">
+                                    </a>
+                                    <a href="{% static 'images/review-photo-2.jpg' %}" data-fancybox="review-gallery" class="review-photo-thumb">
+                                        <img src="{% static 'images/review-photo-2.jpg' %}" alt="Review photo" class="img-fluid rounded" width="60">
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="review-item border-bottom pb-4 mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <h4 class="h6 mb-0 fw-bold">Great tour, excellent guide</h4>
+                                        <div class="rating small text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted small">1 month ago</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <img src="{% static 'images/user-avatar-2.jpg' %}" alt="User" class="rounded-circle me-2" width="32">
+                                    <span class="small fw-bold">Sarah Williams</span>
+                                </div>
+                                <p class="mb-0">Our guide Marco was fantastic - so knowledgeable and passionate about the area. The tour was well-organized and we saw so many amazing sights. The only small complaint was that the lunch stop was a bit rushed.</p>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <button class="btn btn-outline-primary">Load More Reviews</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Map Card -->
+                <div class="card shadow-sm mb-4 border-0 sticky-top" style="top: 20px;">
+                    <div class="card-body p-0">
+                        <div id="map" style="height: 300px; width: 100%;"></div>
+                        <div class="p-3">
+                            <h5 class="h6 fw-bold mb-2">Location Details</h5>
+                            <p class="small mb-2"><i class="fas fa-map-marker-alt text-primary me-2"></i> {{ destination.address|default:"123 Main Street, Downtown" }}</p>
+                            <p class="small mb-3"><i class="fas fa-info-circle text-primary me-2"></i> Best time to visit: {{ destination.best_time|default:"March to October" }}</p>
+                            <button class="btn btn-outline-primary btn-sm w-100">
+                                <i class="fas fa-directions me-1"></i> Get Directions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Facts Card -->
+                <div class="card shadow-sm mb-4 border-0">
+                    <div class="card-body p-4">
+                            <h5 class="h6 fw-bold mb-3">Quick Facts</h5>
+                        <ul class="list-unstyled quick-facts">
+                            <li class="d-flex mb-3">
+                                <div class="quick-fact-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-0 fw-bold small">Language</h6>
+                                    <p class="small mb-0 text-muted">{{ destination.language|default:"English, Spanish" }}</p>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <div class="quick-fact-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-0 fw-bold small">Currency</h6>
+                                    <p class="small mb-0 text-muted">{{ destination.currency|default:"USD ($)" }}</p>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <div class="quick-fact-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                    <i class="fas fa-plug"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-0 fw-bold small">Electricity</h6>
+                                    <p class="small mb-0 text-muted">{{ destination.electricity|default:"120V, Type A/B plugs" }}</p>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <div class="quick-fact-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-0 fw-bold small">Time Zone</h6>
+                                    <p class="small mb-0 text-muted">{{ destination.timezone|default:"UTC-5 (EST)" }}</p>
+                                </div>
+                            </li>
+                            <li class="d-flex">
+                                <div class="quick-fact-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-0 fw-bold small">Visa Requirements</h6>
+                                    <p class="small mb-0 text-muted">{{ destination.visa_requirements|default:"Not required for stays under 90 days" }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tour Statistics -->
+                <div class="card shadow-sm mb-4 border-0">
+                    <div class="card-body p-4">
+                        <h5 class="h6 fw-bold mb-3">Tour Statistics</h5>
+                        <div class="tour-stats">
+                            <div class="stat-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-success bg-opacity-10 text-success rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 small fw-bold">Average Rating</h6>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success">{{ tour_stats.avg_rating|default:"4.8" }}/5</span>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-info bg-opacity-10 text-info rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 small fw-bold">Travelers This Year</h6>
+                                    </div>
+                                </div>
+                                <span class="badge bg-info">{{ tour_stats.travelers_count|default:"1,245" }}</span>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-warning bg-opacity-10 text-warning rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 small fw-bold">Bestseller Tour</h6>
+                                    </div>
+                                </div>
+                                <span class="badge bg-warning text-dark">#1 {{ destination.name }} Explorer</span>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-primary bg-opacity-10 text-primary rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 small fw-bold">Price Range</h6>
+                                    </div>
+                                </div>
+                                <span class="badge bg-primary">${{ tour_stats.min_price|default:"99" }} - ${{ tour_stats.max_price|default:"599" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Why Book With Us -->
+                <div class="card shadow-sm mb-4 border-0">
+                    <div class="card-body p-4">
+                        <h5 class="h6 fw-bold mb-3">Why Book With Us</h5>
+                        <ul class="list-unstyled why-book-list">
+                            <li class="d-flex mb-3">
+                                <div class="me-3 text-success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 small fw-bold">Best Price Guarantee</h6>
+                                    <p class="small mb-0 text-muted">Found a better price? We'll match it!</p>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <div class="me-3 text-success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 small fw-bold">24/7 Customer Support</h6>
+                                    <p class="small mb-0 text-muted">We're here to help anytime</p>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <div class="me-3 text-success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 small fw-bold">Flexible Cancellation</h6>
+                                    <p class="small mb-0 text-muted">Free cancellation up to 24 hours</p>
+                                </div>
+                            </li>
+                            <li class="d-flex">
+                                <div class="me-3 text-success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 small fw-bold">Local Expert Guides</h6>
+                                    <p class="small mb-0 text-muted">Authentic experiences with locals</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="card shadow-sm border-0 bg-primary text-white">
+                    <div class="card-body p-4">
+                        <h5 class="h6 mb-3 fw-bold">Get Travel Deals & Updates</h5>
+                        <p class="small mb-3">Sign up for our newsletter and get the best deals delivered to your inbox.</p>
+                        <form class="newsletter-form">
+                            <div class="mb-3">
+                                <input type="email" class="form-control form-control-sm" placeholder="Your email address">
+                            </div>
+                            <button type="submit" class="btn btn-light btn-sm w-100">
+                                Subscribe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Destinations -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h3 mb-0 fw-bold">You Might Also Like</h2>
+            <a href="{% url 'destinations' %}" class="btn btn-sm btn-outline-primary">View All Destinations</a>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card destination-card border-0 shadow-sm h-100">
+                    <div class="position-relative">
+                        <img src="{% static 'images/destination-2.jpg' %}" class="card-img-top" alt="Related Destination" style="height: 200px; object-fit: cover;">
+                        <div class="card-img-overlay d-flex flex-column justify-content-end p-0">
+                            <div class="destination-overlay p-3">
+                                <h5 class="text-white mb-1">Bali, Indonesia</h5>
+                                <p class="small text-white mb-0">Island of Gods</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="rating small text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-muted ms-1 small">(128)</span>
+                            </div>
+                            <span class="badge bg-success">Bestseller</span>
+                        </div>
+                        <p class="card-text small text-muted mb-3">Explore the beautiful beaches, temples, and culture of Bali with our curated tours.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">From $299</span>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card destination-card border-0 shadow-sm h-100">
+                    <div class="position-relative">
+                        <img src="{% static 'images/destination-3.jpg' %}" class="card-img-top" alt="Related Destination" style="height: 200px; object-fit: cover;">
+                        <div class="card-img-overlay d-flex flex-column justify-content-end p-0">
+                            <div class="destination-overlay p-3">
+                                <h5 class="text-white mb-1">Kyoto, Japan</h5>
+                                <p class="small text-white mb-0">Ancient Temples</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="rating small text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="text-muted ms-1 small">(95)</span>
+                            </div>
+                            <span class="badge bg-info">New</span>
+                        </div>
+                        <p class="card-text small text-muted mb-3">Discover the traditional side of Japan with our cultural tours in Kyoto.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">From $499</span>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card destination-card border-0 shadow-sm h-100">
+                    <div class="position-relative">
+                        <img src="{% static 'images/destination-4.jpg' %}" class="card-img-top" alt="Related Destination" style="height: 200px; object-fit: cover;">
+                        <div class="card-img-overlay d-flex flex-column justify-content-end p-0">
+                            <div class="destination-overlay p-3">
+                                <h5 class="text-white mb-1">Santorini, Greece</h5>
+                                <p class="small text-white mb-0">White & Blue Paradise</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="rating small text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="text-muted ms-1 small">(156)</span>
+                            </div>
+                            <span class="badge bg-danger">Limited</span>
+                        </div>
+                        <p class="card-text small text-muted mb-3">Experience the iconic sunsets and architecture of this Greek island.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">From $399</span>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Write Review Modal -->
+<div class="modal fade" id="writeReviewModal" tabindex="-1" aria-labelledby="writeReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="writeReviewModalLabel">Write a Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="reviewRating" class="form-label">Your Rating</label>
+                        <div class="rating-input">
+                            <input type="radio" id="star5" name="rating" value="5" />
+                            <label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star4" name="rating" value="4" />
+                            <label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star3" name="rating" value="3" />
+                            <label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star2" name="rating" value="2" />
+                            <label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star1" name="rating" value="1" />
+                            <label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reviewTitle" class="form-label">Review Title</label>
+                        <input type="text" class="form-control" id="reviewTitle" placeholder="Summarize your experience">
+                    </div>
+                    <div class="mb-3">
+                        <label for="reviewText" class="form-label">Your Review</label>
+                        <textarea class="form-control" id="reviewText" rows="4" placeholder="Share details of your experience..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reviewPhotos" class="form-label">Add Photos (Optional)</label>
+                        <input type="file" class="form-control" id="reviewPhotos" multiple>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="anonymousReview">
+                        <label class="form-check-label" for="anonymousReview">
+                            Post anonymously
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Submit Review</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Custom CSS for destination page */
+    .destination-hero {
+        position: relative;
+        background-color: #000;
+        color: white;
+        overflow: hidden;
+    }
+    
+    .parallax-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 0;
+        transform: translateZ(0);
+        will-change: transform;
+    }
+    
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .z-index-1 {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .min-vh-60 {
+        min-height: 60vh;
+    }
+    
+    .tour-card {
+        transition: all 0.3s ease;
+    }
+    
+    .tour-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .hover-shadow {
+        transition: box-shadow 0.3s ease;
+    }
+    
+    .hover-shadow:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+    
+    .destination-card {
+        transition: all 0.3s ease;
+    }
+    
+    .destination-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .destination-overlay {
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+        width: 100%;
+    }
+    
+    .rating-input {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+    
+    .rating-input input {
+        display: none;
+    }
+    
+    .rating-input label {
+        color: #ddd;
+        font-size: 1.5rem;
+        padding: 0 3px;
+        cursor: pointer;
+    }
+    
+    .rating-input input:checked ~ label,
+    .rating-input input:hover ~ label {
+        color: #ffc107;
+    }
+    
+    .rating-input label:hover,
+    .rating-input label:hover ~ label {
+        color: #ffc107;
+    }
+    
+    .quick-fact-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 15px;
+    }
+    
+    .gallery-item {
+        overflow: hidden;
+        border-radius: 8px;
+    }
+    
+    .gallery-item img {
+        transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover img {
+        transform: scale(1.05);
+    }
+    
+    .review-photo-thumb {
+        display: block;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+    
+    .review-photo-thumb img {
+        transition: transform 0.3s ease;
+    }
+    
+    .review-photo-thumb:hover img {
+        transform: scale(1.1);
+    }
+    
+    .bg-orange {
+        background-color: #fd7e14;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
+
+<script>
+    // Initialize Google Maps
+    function initMap() {
+        const location = {
+            lat: {{ destination.latitude|default:"-34.397" }},
+            lng: {{ destination.longitude|default:"150.644" }}
+        };
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: location,
+            styles: [
+                {
+                    "featureType": "administrative",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#444444"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "color": "#f2f2f2"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "saturation": -100
+                        },
+                        {
+                            "lightness": 45
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "simplified"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "color": "#46bcec"
+                        },
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                }
+            ]
+        });
+        
+        new google.maps.Marker({
+            position: location,
+            map: map,
+            title: '{{ destination.name }}',
+            icon: {
+                url: "{% static 'images/map-marker.png' %}",
+                scaledSize: new google.maps.Size(40, 40)
+            }
+        });
+    }
+    
+    // Initialize fancybox for gallery
+    document.addEventListener('DOMContentLoaded', function() {
+        Fancybox.bind("[data-fancybox]", {
+            // Your custom options
+        });
+        
+        // Parallax effect for hero section
+        const parallaxBg = document.querySelector('.parallax-background');
+        if (parallaxBg) {
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.pageYOffset;
+                parallaxBg.style.transform = 'translateY(' + scrollPosition * 0.5 + 'px)';
+            });
+        }
+    });
+</script>
+{% endblock %}

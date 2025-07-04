@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Travel Blog - Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="p-5 bg-light rounded-3 text-center" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% static 'images/blog-hero.jpg' %}'); background-size: cover; background-position: center;">
+                <h1 class="display-4 text-white">Travel Blog</h1>
+                <p class="lead text-white">Discover inspiring stories, travel tips, and destination guides from our experts</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search and Filter Section -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-6">
+            <form method="get" class="d-flex shadow-sm">
+                <input type="text" name="q" class="form-control form-control-lg rounded-start" placeholder="Search posts..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-primary rounded-end px-4">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select form-select-lg shadow-sm" onchange="window.location.href=this.value">
+                <option value="?sort=newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest First</option>
+                <option value="?sort=oldest" {% if request.GET.sort == 'oldest' %}selected{% endif %}>Oldest First</option>
+                <option value="?sort=popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>Most Popular</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select form-select-lg shadow-sm" onchange="window.location.href=this.value">
+                <option value="?">All Categories</option>
+                {% for category in categories %}
+                <option value="{% url 'blog:category' category.slug %}" {% if category.slug in request.path %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Featured Post -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="row g-0">
+                    <div class="col-lg-6">
+                        <img src="{% static 'images/featured-blog.jpg' %}" class="img-fluid h-100" style="object-fit: cover;" alt="Featured Post">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-danger">Featured</span>
+                                <small class="text-muted">June 15, 2023</small>
+                            </div>
+                            <h2 class="card-title mb-3">10 Hidden Gems in Bali You Must Visit</h2>
+                            <p class="card-text mb-4">Discover the secret spots that most tourists miss in Bali. From secluded waterfalls to untouched beaches, this guide will take you off the beaten path to experience the real magic of the Island of Gods.</p>
+                            <div class="d-flex align-items-center mb-4">
+                                <img src="{% static 'images/author-1.jpg' %}" class="rounded-circle me-2" width="40" height="40" alt="Author">
+                                <div>
+                                    <h6 class="mb-0">Sarah Johnson</h6>
+                                    <small class="text-muted">Travel Expert</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-light text-dark me-2"><i class="fas fa-eye me-1"></i> 2.4K</span>
+                                    <span class="badge bg-light text-dark me-2"><i class="fas fa-heart me-1"></i> 348</span>
+                                    <span class="badge bg-light text-dark"><i class="fas fa-comment me-1"></i> 42</span>
+                                </div>
+                                <a href="#" class="btn btn-primary px-4">Read Story</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories and Tags -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h4 class="mb-3">Popular Categories</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="#" class="btn btn-primary px-4 py-2 rounded-pill">
+                    <i class="fas fa-umbrella-beach me-2"></i> Beach Destinations
+                </a>
+                <a href="#" class="btn btn-outline-primary px-4 py-2 rounded-pill">
+                    <i class="fas fa-hiking me-2"></i> Adventure Travel
+                </a>
+                <a href="#" class="btn btn-outline-primary px-4 py-2 rounded-pill">
+                    <i class="fas fa-utensils me-2"></i> Food & Culture
+                </a>
+                <a href="#" class="btn btn-outline-primary px-4 py-2 rounded-pill">
+                    <i class="fas fa-wallet me-2"></i> Budget Travel
+                </a>
+                <a href="#" class="btn btn-outline-primary px-4 py-2 rounded-pill">
+                    <i class="fas fa-suitcase-rolling me-2"></i> Travel Tips
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 mt-4 mt-md-0">
+            <h4 class="mb-3">Trending Tags</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="#" class="btn btn-light px-3 py-1 rounded-pill">#Bali</a>
+                <a href="#" class="btn btn-light px-3 py-1 rounded-pill">#SoloTravel</a>
+                <a href="#" class="btn btn-light px-3 py-1 rounded-pill">#Luxury</a>
+                <a href="#" class="btn btn-light px-3 py-1 rounded-pill">#Hiking</a>
+                <a href="#" class="btn btn-light px-3 py-1 rounded-pill">#Foodie</a>
+                <a href="#" class="btn btn-light px-3 py-1 rounded-pill">#Photography</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Posts Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        <!-- Sample Blog Post 1 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                <div class="position-relative">
+                    <img src="{% static 'images/blog-1.jpg' %}" class="card-img-top" alt="Bali Temples" style="height: 200px; object-fit: cover;">
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Culture</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-muted"><i class="far fa-calendar me-1"></i> May 28, 2023</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 5 min read</small>
+                    </div>
+                    <h5 class="card-title">Sacred Temples of Bali: A Spiritual Journey</h5>
+                    <p class="card-text">Explore the most breathtaking temples in Bali and learn about their spiritual significance in Balinese Hinduism.</p>
+                    <div class="d-flex align-items-center mt-auto">
+                        <img src="{% static 'images/author-2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Author">
+                        <small>By Michael Chen</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted me-3"><i class="far fa-eye me-1"></i> 1.2K</span>
+                            <span class="text-muted"><i class="far fa-heart me-1"></i> 156</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sample Blog Post 2 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                <div class="position-relative">
+                    <img src="{% static 'images/blog-2.jpg' %}" class="card-img-top" alt="Street Food" style="height: 200px; object-fit: cover;">
+                    <span class="badge bg-success position-absolute top-0 end-0 m-2">Food</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-muted"><i class="far fa-calendar me-1"></i> April 15, 2023</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 7 min read</small>
+                    </div>
+                    <h5 class="card-title">Bangkok Street Food Guide: Must-Try Dishes</h5>
+                    <p class="card-text">Navigate Bangkok's vibrant street food scene with our expert guide to the best local dishes and where to find them.</p>
+                    <div class="d-flex align-items-center mt-auto">
+                        <img src="{% static 'images/author-3.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Author">
+                        <small>By Priya Sharma</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted me-3"><i class="far fa-eye me-1"></i> 2.8K</span>
+                            <span class="text-muted"><i class="far fa-heart me-1"></i> 421</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sample Blog Post 3 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                <div class="position-relative">
+                    <img src="{% static 'images/blog-3.jpg' %}" class="card-img-top" alt="Hiking Gear" style="height: 200px; object-fit: cover;">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Gear</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-muted"><i class="far fa-calendar me-1"></i> March 22, 2023</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 10 min read</small>
+                    </div>
+                    <h5 class="card-title">Essential Hiking Gear for Your Next Adventure</h5>
+                    <p class="card-text">Our comprehensive guide to the must-have equipment for any hiking trip, whether you're a beginner or seasoned trekker.</p>
+                    <div class="d-flex align-items-center mt-auto">
+                        <img src="{% static 'images/author-4.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Author">
+                        <small>By David Wilson</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted me-3"><i class="far fa-eye me-1"></i> 3.5K</span>
+                            <span class="text-muted"><i class="far fa-heart me-1"></i> 587</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sample Blog Post 4 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                <div class="position-relative">
+                    <img src="{% static 'images/blog-4.jpg' %}" class="card-img-top" alt="Solo Travel" style="height: 200px; object-fit: cover;">
+                    <span class="badge bg-info position-absolute top-0 end-0 m-2">Tips</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-muted"><i class="far fa-calendar me-1"></i> February 18, 2023</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 8 min read</small>
+                    </div>
+                    <h5 class="card-title">Solo Travel Safety: Tips for Women Travelers</h5>
+                    <p class="card-text">Empowering advice and practical safety tips for women traveling alone around the world.</p>
+                    <div class="d-flex align-items-center mt-auto">
+                        <img src="{% static 'images/author-5.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Author">
+                        <small>By Emma Rodriguez</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted me-3"><i class="far fa-eye me-1"></i> 4.1K</span>
+                            <span class="text-muted"><i class="far fa-heart me-1"></i> 892</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sample Blog Post 5 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                <div class="position-relative">
+                    <img src="{% static 'images/blog-5.jpg' %}" class="card-img-top" alt="Budget Travel" style="height: 200px; object-fit: cover;">
+                    <span class="badge bg-secondary position-absolute top-0 end-0 m-2">Budget</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-muted"><i class="far fa-calendar me-1"></i> January 5, 2023</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 6 min read</small>
+                    </div>
+                    <h5 class="card-title">Southeast Asia on $30 a Day: Budget Guide</h5>
+                    <p class="card-text">How to experience the best of Southeast Asia without breaking the bank - accommodation, food, and transport tips.</p>
+                    <div class="d-flex align-items-center mt-auto">
+                        <img src="{% static 'images/author-6.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Author">
+                        <small>By James Peterson</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted me-3"><i class="far fa-eye me-1"></i> 5.3K</span>
+                            <span class="text-muted"><i class="far fa-heart me-1"></i> 1.2K</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sample Blog Post 6 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                <div class="position-relative">
+                    <img src="{% static 'images/blog-6.jpg' %}" class="card-img-top" alt="Photography" style="height: 200px; object-fit: cover;">
+                    <span class="badge bg-dark position-absolute top-0 end-0 m-2">Photography</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-muted"><i class="far fa-calendar me-1"></i> December 12, 2022</small>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i> 12 min read</small>
+                    </div>
+                    <h5 class="card-title">Travel Photography: Capturing the Perfect Shot</h5>
+                    <p class="card-text">Professional tips and techniques for taking stunning travel photos with any camera, from smartphones to DSLRs.</p>
+                    <div class="d-flex align-items-center mt-auto">
+                        <img src="{% static 'images/author-7.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Author">
+                        <small>By Lisa Chen</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted me-3"><i class="far fa-eye me-1"></i> 3.8K</span>
+                            <span class="text-muted"><i class="far fa-heart me-1"></i> 754</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter Subscription -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="p-5 bg-primary text-white rounded-3 text-center">
+                <h3 class="mb-3">Get Travel Inspiration Directly to Your Inbox</h3>
+                <p class="mb-4">Subscribe to our newsletter for exclusive content, travel deals, and insider tips</p>
+                <form class="row g-2 justify-content-center">
+                    <div class="col-md-6">
+                        <input type="email" class="form-control form-control-lg" placeholder="Your email address">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-light btn-lg w-100">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Blog pagination" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize category dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set the selected sort option
+        const sortSelect = document.querySelector('select[onchange*="sort"]');
+        const currentSort = new URLSearchParams(window.location.search).get('sort');
+        if (currentSort) {
+            sortSelect.value = `?sort=${currentSort}`;
+        }
+        
+        // Add click event for category badges
+        document.querySelectorAll('.category-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                window.location.href = this.getAttribute('data-category-url');
+            });
+        });
+    });
+    
+    // Search form enhancement
+    const searchForm = document.querySelector('form[method="get"]');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            const searchInput = this.querySelector('input[name="q"]');
+            if (!searchInput.value.trim()) {
+                e.preventDefault();
+            }
+        });
+    }
+</script>
+{% endblock %}
