@@ -1,0 +1,8 @@
+<h2>Book {{ package.title }}</h2>
+<form method="post">
+  {% csrf_token %}
+  Name: <input type="text" name="name"><br>
+  Email: <input type="email" name="email"><br>
+  Date: <input type="date" name="booking_date"><br>
+  <button type="submit">Book</button>
+</form>

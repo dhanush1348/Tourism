@@ -1,0 +1,56 @@
+{% extends 'travel/base.html' %}
+
+{% block title %}Search Results - Tours & Travel{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Search Results</h1>
+    
+    {% if query %}
+        <p class="lead">Search results for: "{{ query }}"</p>
+        
+        {% if packages %}
+            <div class="row">
+                {% for package in packages %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ package.image.url }}" class="card-img-top" alt="{{ package.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ package.title }}</h5>
+                            <p class="text-muted">
+                                <i class="fas fa-map-marker-alt"></i> {{ package.destination.name }}
+                            </p>
+                            <p class="card-text">{{ package.description|truncatewords:20 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-bold">${{ package.price }}</span>
+                                <span class="badge bg-{{ package.difficulty|lower }}">{{ package.difficulty|title }}</span>
+                            </div>
+                            <a href="{% url 'travel:package_detail' package.pk %}" class="btn btn-primary mt-3 w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No packages found matching your search criteria.
+                <a href="{% url 'travel:package_list' %}" class="alert-link">View all packages</a>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-warning">
+            Please enter a search term to find packages.
+        </div>
+    {% endif %}
+    
+    <div class="mt-4">
+        <a href="{% url 'travel:package_list' %}" class="btn btn-outline-primary">Browse All Packages</a>
+    </div>
+</div>
+
+<style>
+.bg-easy { background-color: #28a745; }
+.bg-moderate { background-color: #ffc107; }
+.bg-challenging { background-color: #dc3545; }
+</style>
+{% endblock %}

@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}Discover unforgettable travel experiences with Wanderlust. Book amazing tour packages and create memories worldwide.{% endblock %}">
+    <meta name="keywords" content="travel, tours, vacations, destinations, adventure, booking">
+    <meta name="author" content="Wanderlust Travel">
+    <meta name="theme-color" content="#0A0F2C">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}Wanderlust - Your Ultimate Travel Companion{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover and book amazing tour packages to destinations worldwide.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'travel/images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:url" content="https://www.wanderlust.com">
+    
+    <title>{% block title %}Wanderlust - Premium Travel & Tours{% endblock %}</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navy': '#0A0F2C',
+                        'gold': '#D4A853',
+                        'ivory': '#F8F4EE',
+                        'teal': '#00B4A6',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F4EE;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Smooth transitions */
+        * {
+            transition: all 0.3s ease;
+        }
+        
+        /* Navbar scroll effect */
+        nav {
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            background: rgba(10, 15, 44, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Card hover effects */
+        .card-hover {
+            cursor: pointer;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #0A0F2C 0%, #D4A853 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Parallax effect */
+        .parallax {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-ivory text-navy">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full top-0 z-50 bg-white transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="{% url 'travel:home' %}" class="flex items-center space-x-2">
+                    <i class="fas fa-globe text-gold text-2xl"></i>
+                    <span class="text-2xl font-bold font-serif text-navy">Wanderlust</span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="{% url 'travel:home' %}" class="text-navy hover:text-gold transition-colors">Home</a>
+                    <a href="{% url 'travel:destination_list' %}" class="text-navy hover:text-gold transition-colors">Destinations</a>
+                    <a href="{% url 'travel:package_list' %}" class="text-navy hover:text-gold transition-colors">Packages</a>
+                    <a href="#" class="text-navy hover:text-gold transition-colors">About</a>
+                </div>
+                
+                <!-- Auth Buttons -->
+                <div class="hidden md:flex space-x-4">
+                    {% if user.is_authenticated %}
+                        <span class="text-navy">Welcome, {{ user.first_name|default:user.username }}</span>
+                        <a href="{% url 'admin:logout' %}" class="px-4 py-2 bg-teal text-white rounded-lg hover:bg-opacity-90">Logout</a>
+                    {% else %}
+                        <a href="{% url 'travel:login' %}" class="px-4 py-2 text-navy border-2 border-navy rounded-lg hover:bg-navy hover:text-ivory">Login</a>
+                        <a href="{% url 'travel:register' %}" class="px-4 py-2 bg-gold text-navy rounded-lg hover:bg-opacity-90 font-semibold">Sign Up</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <button id="mobile-menu-btn" class="md:hidden text-navy">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="{% url 'travel:home' %}" class="block py-2 text-navy hover:text-gold">Home</a>
+                <a href="{% url 'travel:destination_list' %}" class="block py-2 text-navy hover:text-gold">Destinations</a>
+                <a href="{% url 'travel:package_list' %}" class="block py-2 text-navy hover:text-gold">Packages</a>
+                <a href="#" class="block py-2 text-navy hover:text-gold">About</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'admin:logout' %}" class="block py-2 text-teal">Logout</a>
+                {% else %}
+                    <a href="{% url 'travel:login' %}" class="block py-2 text-navy">Login</a>
+                    <a href="{% url 'travel:register' %}" class="block py-2 text-gold font-semibold">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-16">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-navy text-ivory mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-globe text-gold text-2xl"></i>
+                        <span class="text-2xl font-bold font-serif">Wanderlust</span>
+                    </div>
+                    <p class="text-ivory/70">Your gateway to extraordinary travel experiences worldwide.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gold hover:text-ivory"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gold hover:text-ivory"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gold hover:text-ivory"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gold hover:text-ivory"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold font-serif text-gold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-ivory/70">
+                        <li><a href="{% url 'travel:destination_list' %}" class="hover:text-gold">Destinations</a></li>
+                        <li><a href="{% url 'travel:package_list' %}" class="hover:text-gold">Packages</a></li>
+                        <li><a href="#" class="hover:text-gold">Blog</a></li>
+                        <li><a href="#" class="hover:text-gold">Visa Guide</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h4 class="text-lg font-semibold font-serif text-gold mb-4">Support</h4>
+                    <ul class="space-y-2 text-ivory/70">
+                        <li><a href="#" class="hover:text-gold">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-gold">FAQ</a></li>
+                        <li><a href="#" class="hover:text-gold">Terms & Conditions</a></li>
+                        <li><a href="#" class="hover:text-gold">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-lg font-semibold font-serif text-gold mb-4">Newsletter</h4>
+                    <p class="text-ivory/70 mb-3">Subscribe for exclusive deals and travel tips.</p>
+                    <form class="flex" action="#" method="POST">
+                        <input type="email" placeholder="Your email" class="px-3 py-2 rounded-l-lg text-navy flex-1 focus:outline-none">
+                        <button type="submit" class="px-4 py-2 bg-gold text-navy rounded-r-lg hover:bg-opacity-90 font-semibold">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="border-t border-ivory/20 pt-8">
+                <p class="text-center text-ivory/50">&copy; 2026 Wanderlust Travels. All rights reserved. | <a href="#" class="hover:text-gold">Sitemap</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn?.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Dark mode toggle (optional)
+        const html = document.documentElement;
+        if (localStorage.getItem('dark-mode') === 'true') {
+            html.classList.add('dark');
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

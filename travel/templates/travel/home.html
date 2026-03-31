@@ -1,0 +1,142 @@
+{% extends 'travel/base.html' %}
+
+{% block title %}Welcome to Wanderlust - Your Journey Begins Here{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4">Discover Amazing Places</h1>
+        <p class="lead">Find your perfect adventure with our curated tour packages</p>
+        {% if user.is_authenticated %}
+            <p class="mb-4">Welcome back, {{ user.username }}!</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'travel:destination_list' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-compass me-2"></i>Start Exploring
+                </a>
+                <a href="{% url 'travel:logout' %}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+            </div>
+        {% else %}
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'travel:login' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+                <a href="{% url 'travel:register' %}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>Register
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Featured Destinations -->
+<section class="container mb-5">
+    <h2 class="text-center mb-4">Popular Destinations</h2>
+    <div class="row">
+        {% for destination in destinations %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 fade-in">
+                {% if destination.image %}
+                <img src="{{ destination.image.url }}" class="card-img-top" alt="{{ destination.name }}">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-mountain fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ destination.name }}</h5>
+                    <p class="card-text">{{ destination.description|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ destination.location }}
+                        </span>
+                        <a href="{% url 'travel:destination_detail' destination.pk %}" class="btn btn-outline-primary">
+                            Explore
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Featured Packages -->
+<section class="container mb-5">
+    <h2 class="text-center mb-4">Featured Tour Packages</h2>
+    <div class="row">
+        {% for package in packages %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 fade-in">
+                {% if package.image %}
+                <img src="{{ package.image.url }}" class="card-img-top" alt="{{ package.title }}">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-image fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ package.title }}</h5>
+                    <p class="text-muted">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ package.destination.name }}
+                    </p>
+                    <p class="card-text">{{ package.description|truncatewords:15 }}</p>
+                    <div class="package-info">
+                        <div class="info-item">
+                            <i class="fas fa-clock text-primary"></i>
+                            <span>{{ package.duration }} days</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-mountain text-primary"></i>
+                            <span class="badge bg-{{ package.difficulty|lower }}">{{ package.difficulty }}</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="package-price">${{ package.price }}</span>
+                        <a href="{% url 'travel:package_detail' package.pk %}" class="btn btn-primary">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'travel:package_list' %}" class="btn btn-outline-primary btn-lg">
+            View All Packages
+        </a>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="container mb-5">
+    <h2 class="text-center mb-4">Why Choose Wanderlust</h2>
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="p-4 bg-white rounded-3 shadow-sm fade-in">
+                <i class="fas fa-medal fa-3x text-primary mb-3"></i>
+                <h4>Expert Guides</h4>
+                <p>Professional and experienced guides to ensure a safe and enriching journey.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 bg-white rounded-3 shadow-sm fade-in">
+                <i class="fas fa-heart fa-3x text-primary mb-3"></i>
+                <h4>Best Value</h4>
+                <p>Competitive prices and exclusive deals for unforgettable experiences.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 bg-white rounded-3 shadow-sm fade-in">
+                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                <h4>Safe Travel</h4>
+                <p>Your safety is our priority with comprehensive travel insurance coverage.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

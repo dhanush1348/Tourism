@@ -1,0 +1,77 @@
+{% extends 'travel/base.html' %}
+
+{% block title %}Booking Confirmation - Tours & Travel{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    <h1 class="mt-4">Booking Confirmed!</h1>
+                    <p class="lead">Thank you for booking with Tours & Travel</p>
+                    
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h4>Booking Details</h4>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th>Booking Reference:</th>
+                                    <td>#{{ booking.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Package:</th>
+                                    <td>{{ booking.package.title }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Destination:</th>
+                                    <td>{{ booking.package.destination.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>{{ booking.user_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td>{{ booking.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone:</th>
+                                    <td>{{ booking.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Travel Date:</th>
+                                    <td>{{ booking.booking_date }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Number of Participants:</th>
+                                    <td>{{ booking.number_of_participants }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Amount:</th>
+                                    <td>${{ booking.total_price }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status:</th>
+                                    <td><span class="badge bg-success">{{ booking.status|title }}</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <p>A confirmation email has been sent to {{ booking.email }}</p>
+                        <p class="text-muted">Please check your email for more details about your booking.</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'travel:home' %}" class="btn btn-primary">Return to Home</a>
+                        <a href="{% url 'travel:package_list' %}" class="btn btn-outline-primary ms-2">Browse More Packages</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

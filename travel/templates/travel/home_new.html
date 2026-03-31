@@ -1,0 +1,338 @@
+{% extends 'travel/base_new.html' %}
+{% load static %}
+
+{% block title %}Wanderlust - Discover Your Next Adventure{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="relative w-full h-screen bg-gradient-to-b from-navy to-navy/80 overflow-hidden flex items-center justify-center">
+    <!-- Background image with overlay -->
+    <div class="absolute inset-0 opacity-30" style="background: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200') center/cover;"></div>
+    
+    <!-- Animated particles -->
+    <div class="absolute inset-0" id="particles"></div>
+    
+    <!-- Content -->
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+        <h1 class="text-5xl md:text-7xl font-bold font-serif text-ivory mb-4 leading-tight">
+            Explore the <span class="gradient-text">World</span> with Wanderlust
+        </h1>
+        <p class="text-xl md:text-2xl text-ivory/80 mb-8 max-w-2xl mx-auto">
+            Curated travel experiences to the most extraordinary destinations. Create unforgettable memories.
+        </p>
+        
+        <!-- Glassmorphism Search Bar -->
+        <div class="glass rounded-2xl p-6 md:p-8 max-w-2xl mx-auto mb-8 shadow-lg">
+            <form method="GET" action="{% url 'travel:search_packages' %}" class="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-2">
+                <div>
+                    <label class="block text-sm font-semibold text-navy mb-2">Destination</label>
+                    <input type="text" name="destination" placeholder="Where to?" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold text-navy">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-navy mb-2">Check-in</label>
+                    <input type="date" name="check_in" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold text-navy">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-navy mb-2">Travelers</label>
+                    <select name="travelers" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold text-navy">
+                        <option value="1">1 Person</option>
+                        <option value="2">2 People</option>
+                        <option value="3">3 People</option>
+                        <option value="4">4+ People</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-gold text-navy px-6 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all duration-300 flex justify-center items-center">
+                        <i class="fas fa-search mr-2"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- CTA Button -->
+        <a href="{% url 'travel:package_list' %}" class="inline-flex items-center px-8 py-4 bg-teal text-ivory rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 shadow-lg">
+            Explore Packages <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
+        <i class="fas fa-chevron-down text-gold text-2xl"></i>
+    </div>
+</section>
+
+<!-- Featured Destinations Grid -->
+<section class="py-20 bg-ivory">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-bold font-serif text-navy mb-4">Featured Destinations</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Handpicked destinations carefully curated for unforgettable journeys</p>
+        </div>
+        
+        <!-- Masonry Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for destination in destinations %}
+            <div class="group card-hover rounded-2xl overflow-hidden shadow-lg h-80 relative">
+                <!-- Image -->
+                <img src="{{ destination.image_url|default:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=500&fit=crop' }}" alt="{{ destination.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                
+                <!-- Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h3 class="text-2xl font-bold font-serif text-ivory mb-2">{{ destination.name }}</h3>
+                    <p class="text-ivory/80 mb-4">{{ destination.description|truncatechars:100 }}</p>
+                    
+                    <!-- Rating -->
+                    <div class="flex items-center space-x-2">
+                        <div class="flex text-gold">
+                            {% for i in "12345" %}
+                            <i class="fas fa-star"></i>
+                            {% endfor %}
+                        </div>
+                        <span class="text-ivory text-sm">{{ destination.rating|default:"5.0" }}/5</span>
+                    </div>
+                </div>
+                
+                <!-- Top badge -->
+                <div class="absolute top-4 right-4 bg-gold text-navy px-4 py-2 rounded-full text-sm font-semibold">
+                    {% if destination.featured %}Featured{% else %}Popular{% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="col-span-3 text-center text-gray-600 py-8">No destinations available yet.</p>
+            {% endfor %}
+        </div>
+        
+        <!-- View All Button -->
+        <div class="text-center mt-12">
+            <a href="{% url 'travel:destination_list' %}" class="inline-flex items-center px-8 py-4 bg-navy text-ivory rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all duration-300">
+                View All Destinations <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Tour Packages Section -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-bold font-serif text-navy mb-4">Premium Tour Packages</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Expertly planned journeys with all-inclusive amenities</p>
+        </div>
+        
+        <!-- Packages Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for package in packages %}
+            <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg">
+                <!-- Image -->
+                <div class="relative h-64 overflow-hidden bg-gradient-to-br from-navy to-teal">
+                    <img src="{{ package.image|default:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=400&fit=crop' }}" alt="{{ package.name }}" class="w-full h-full object-cover opacity-90">
+                    
+                    <!-- Ribbon Badge -->
+                    <div class="absolute top-0 right-0 bg-gold text-navy px-4 py-2 font-bold text-sm transform skew-x-[-20deg] translate-x-4 -translate-y-2">
+                        ₹{{ package.price|default:"0" }}
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold font-serif text-navy mb-2">{{ package.name }}</h3>
+                    
+                    <!-- Duration & Difficulty -->
+                    <div class="flex justify-between items-center mb-3 text-sm text-gray-600">
+                        <span><i class="fas fa-calendar text-gold mr-1"></i>{{ package.duration|default:"5" }} Days</span>
+                        <span><i class="fas fa-chart-line text-teal mr-1"></i>{% if package.difficulty %}{{ package.difficulty }}{% else %}Moderate{% endif %}</span>
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ package.description|default:"Experience the best this destination has to offer with our expertly curated itinerary." }}</p>
+                    
+                    <!-- Highlights -->
+                    <ul class="space-y-1 mb-4 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-teal mr-2"></i>Guided tours included</li>
+                        <li><i class="fas fa-check text-teal mr-2"></i>Hotel accommodation</li>
+                        <li><i class="fas fa-check text-teal mr-2"></i>All meals included</li>
+                    </ul>
+                    
+                    <!-- Rating -->
+                    <div class="flex items-center justify-between mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex text-gold text-sm">
+                            {% for i in "12345" %}
+                            <i class="fas fa-star"></i>
+                            {% endfor %}
+                        </div>
+                        <span class="text-gray-600 text-sm">{{ package.rating|default:"4.8" }}/5</span>
+                    </div>
+                    
+                    <!-- CTA -->
+                    <a href="{% url 'travel:package_detail' package.id %}" class="w-full block text-center bg-teal text-white px-4 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all duration-300">
+                        <i class="fas fa-arrow-right mr-2"></i> Book Now
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="col-span-3 text-center text-gray-600 py-8">No packages available yet.</p>
+            {% endfor %}
+        </div>
+        
+        <!-- View All Button -->
+        <div class="text-center mt-12">
+            <a href="{% url 'travel:package_list' %}" class="inline-flex items-center px-8 py-4 bg-navy text-ivory rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all duration-300">
+                View All Packages <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-navy text-ivory">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-bold font-serif mb-4">How It Works</h2>
+            <p class="text-lg text-ivory/70 max-w-2xl mx-auto">Three simple steps to your dream vacation</p>
+        </div>
+        
+        <!-- Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            <!-- Connecting Line (hidden on mobile) -->
+            <div class="hidden md:block absolute top-16 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" style="top: 60px;"></div>
+            
+            <!-- Step 1 -->
+            <div class="relative">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-20 h-20 rounded-full bg-gold text-navy flex items-center justify-center text-3xl font-bold font-serif mb-4 relative z-10">
+                        1
+                    </div>
+                    <h3 class="text-2xl font-bold font-serif mb-3">Search & Explore</h3>
+                    <p class="text-ivory/70">Browse our curated collection of destinations and tour packages tailored to your interests.</p>
+                </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="relative">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-20 h-20 rounded-full bg-teal text-navy flex items-center justify-center text-3xl font-bold font-serif mb-4 relative z-10">
+                        2
+                    </div>
+                    <h3 class="text-2xl font-bold font-serif mb-3">Book Your Trip</h3>
+                    <p class="text-ivory/70">Select your dates, customize your itinerary, and complete a secure booking in minutes.</p>
+                </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="relative">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-20 h-20 rounded-full bg-gold text-navy flex items-center justify-center text-3xl font-bold font-serif mb-4 relative z-10">
+                        3
+                    </div>
+                    <h3 class="text-2xl font-bold font-serif mb-3">Travel & Enjoy</h3>
+                    <p class="text-ivory/70">Embark on your unforgettable adventure with our expert guides and premium services.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-ivory">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-bold font-serif text-navy mb-4">What Travelers Say</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Real experiences from our amazing clients</p>
+        </div>
+        
+        <!-- Testimonials Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="glass p-8 rounded-xl">
+                <div class="flex items-center mb-4">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop" alt="Traveler" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold text-navy">Sarah Johnson</h4>
+                        <p class="text-sm text-gray-600">Explored Bali</p>
+                    </div>
+                </div>
+                <div class="flex text-gold text-sm mb-3">
+                    {% for i in "123456" %}<i class="fas fa-star"></i>{% endfor %}
+                </div>
+                <p class="text-gray-700">"Wanderlust made my Indonesia trip absolutely unforgettable. The tours were perfectly organized and the guides were incredibly knowledgeable!"</p>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="glass p-8 rounded-xl">
+                <div class="flex items-center mb-4">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="Traveler" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold text-navy">Michael Chen</h4>
+                        <p class="text-sm text-gray-600">Visited Paris & Swiss Alps</p>
+                    </div>
+                </div>
+                <div class="flex text-gold text-sm mb-3">
+                    {% for i in "123456" %}<i class="fas fa-star"></i>{% endfor %}
+                </div>
+                <p class="text-gray-700">"The attention to detail in every aspect of our European tour was exceptional. Highly recommended for anyone seeking premium travel experiences!"</p>
+            </div>
+            
+            <!-- Testimonial 3 -->
+            <div class="glass p-8 rounded-xl">
+                <div class="flex items-center mb-4">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop" alt="Traveler" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold text-navy">Emma Williams</h4>
+                        <p class="text-sm text-gray-600">Adventure in New Zealand</p>
+                    </div>
+                </div>
+                <div class="flex text-gold text-sm mb-3">
+                    {% for i in "123456" %}<i class="fas fa-star"></i>{% endfor %}
+                </div>
+                <p class="text-gray-700">"Best travel investment ever. From booking to landing home, everything was seamless. Can't wait for my next Wanderlust adventure!"</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-navy to-navy/80 text-ivory relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="currentColor" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#pattern)"/></svg>
+    </div>
+    
+    <div class="relative z-10 max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl md:text-5xl font-bold font-serif mb-6">Ready to Explore the World?</h2>
+        <p class="text-xl text-ivory/80 mb-8 max-w-2xl mx-auto">Join thousands of travelers who have discovered their dream destinations with Wanderlust.</p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'travel:package_list' %}" class="inline-flex items-center justify-center px-8 py-4 bg-gold text-navy rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all duration-300">
+                Explore Packages <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="{% url 'travel:destination_list' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-gold text-ivory rounded-full text-lg font-semibold hover:bg-gold hover:text-navy transition-all duration-300">
+                Browse Destinations <i class="fas fa-compass ml-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Popup particle animation (optional) -->
+<script>
+    const particlesContainer = document.getElementById('particles');
+    if (particlesContainer) {
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: absolute;
+                width: 2px;
+                height: 2px;
+                background: rgba(255, 255, 255, 0.5);
+                border-radius: 50%;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation: float ${3 + Math.random() * 3}s ease-in-out infinite;
+                animation-delay: ${Math.random() * 2}s;
+            `;
+            particlesContainer.appendChild(particle);
+        }
+    }
+</script>
+
+{% endblock %}

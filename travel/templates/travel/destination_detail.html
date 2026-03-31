@@ -1,0 +1,62 @@
+{% extends 'travel/base.html' %}
+
+{% block title %}{{ destination.name }} - Tours & Travel{% endblock %}
+
+{% block content %}
+<div class="hero-section" style="background-image: url('{{ destination.image.url }}');">
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="display-4 fw-bold">{{ destination.name }}</h1>
+                <p class="lead"><i class="fas fa-map-marker-alt"></i> {{ destination.location }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4">About {{ destination.name }}</h2>
+            <p class="lead">{{ destination.description }}</p>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Facts</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-plane-departure me-2"></i> Available Tour Packages: {{ packages.count }}</li>
+                        <li><i class="fas fa-clock me-2"></i> Best Time to Visit: Year-round</li>
+                        <li><i class="fas fa-language me-2"></i> Local Language: English</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mt-5 mb-4">Available Tour Packages</h2>
+    <div class="row">
+        {% for package in packages %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ package.image.url }}" class="card-img-top" alt="{{ package.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ package.title }}</h5>
+                    <p class="card-text">{{ package.description|truncatewords:20 }}</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-clock me-2"></i> {{ package.duration }} days</li>
+                        <li><i class="fas fa-users me-2"></i> Max {{ package.max_participants }} people</li>
+                        <li><i class="fas fa-tag me-2"></i> ${{ package.price }}</li>
+                    </ul>
+                    <a href="{% url 'travel:package_detail' package.pk %}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>No tour packages available for this destination at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

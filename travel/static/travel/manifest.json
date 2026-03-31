@@ -1,0 +1,45 @@
+{
+  "name": "Wanderlust - Tour & Travel Booking",
+  "short_name": "Wanderlust",
+  "description": "Discover and book amazing tour packages to destinations worldwide. Create unforgettable travel memories with Wanderlust.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#007bff",
+  "background_color": "#ffffff",
+  "categories": ["travel", "lifestyle"],
+  "screenshots": [
+    {
+      "src": "/static/travel/images/screenshot-small.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/static/travel/images/screenshot-large.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/static/travel/images/favicon.ico",
+      "sizes": "48x48 64x64 96x96 128x128",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/static/travel/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "colors": [
+    {
+      "space": "srgb",
+      "value": "#007bff"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+Test_Case_ID,Test_Title,Category,Priority,Assigned_To,Status,Environment,Execution_Date,Hours_Spent,Expected_Result,Actual_Result,Pass_Fail,Defect_ID,Notes,Execution_Time_ms
+TC-001,User Registration - Valid Data,Authentication,Critical,QA_Engineer_1,In Progress,Development,2026-03-30,0.5,User created and redirected to login,User created successfully,Pass,,Tested with valid email and password,250
+TC-002,User Registration - Password Mismatch,Authentication,Critical,QA_Engineer_1,In Progress,Development,2026-03-30,0.5,Form error displayed,Error message shown,Pass,,Password validation working correctly,180
+TC-003,User Registration - Duplicate Username,Authentication,Critical,QA_Engineer_1,Blocked,Development,2026-03-31,0.3,Duplicate error shown,Username already exists message,Fail,DEF-001,Form should prevent duplicate signup,200
+TC-004,User Login - Valid Credentials,Authentication,Critical,QA_Engineer_1,Not Started,Development,,,User authenticated and session created,,,
+TC-005,User Login - Invalid Credentials,Authentication,High,QA_Engineer_1,Not Started,Development,,,Auth failed and error shown,,,
+TC-006,Fetch All Destinations,Destination,High,QA_Engineer_1,Passed,Development,2026-03-30,1.0,200 OK with destination list,List returned with 15 items,Pass,,Pagination working,400
+TC-007,Fetch Single Destination,Destination,High,QA_Engineer_1,Passed,Development,2026-03-30,0.5,200 OK with destination details,Single destination with packages,Pass,,No issues,180
+TC-008,Fetch Non-existent Destination,Destination,Medium,QA_Engineer_1,Passed,Development,2026-03-30,0.5,404 Not Found error,404 returned correctly,Pass,,Error handling working,150
+TC-009,Pagination Testing,Destination,Medium,QA_Engineer_1,In Progress,Development,2026-03-31,1.5,Page 2 loads with next 15 items,Page parameter working,Pass,,Need to verify page size,520
+TC-010,Search Destinations,Destination,High,QA_Engineer_1,Passed,Development,2026-03-30,1.0,Matching destinations returned,Search found 5 results,Pass,,Case insensitive search,350
+TC-011,Fetch All Packages,Tour_Package,High,QA_Engineer_2,Passed,Development,2026-03-30,1.0,200 OK with full package list,12 packages returned,Pass,,All packages visible,480
+TC-012,Filter Packages - Easy Difficulty,Tour_Package,High,QA_Engineer_2,Passed,Development,2026-03-30,1.0,Only easy packages returned,4 easy packages found,Pass,,Filtering working correctly,320
+TC-013,Filter Packages - Moderate Difficulty,Tour_Package,High,QA_Engineer_2,In Progress,Development,2026-03-31,0.8,Only moderate packages returned,5 moderate packages found,Pass,,No issues,340
+TC-014,Filter Packages - Challenging Difficulty,Tour_Package,High,QA_Engineer_2,In Progress,Development,2026-03-31,0.8,Only challenging packages returned,3 challenging packages found,Pass,,No issues,380
+TC-015,Filter Packages - Low Price Range,Tour_Package,High,QA_Engineer_2,Passed,Development,2026-03-30,1.2,Packages 400-600 returned,8 packages in range,Pass,,Validation working,410
+TC-016,Filter Packages - Medium Price Range,Tour_Package,High,QA_Engineer_2,Passed,Development,2026-03-30,1.0,Packages 800-1000 returned,5 packages in range,Pass,,No issues,390
+TC-017,Filter Packages - High Price Range,Tour_Package,High,QA_Engineer_2,In Progress,Development,2026-03-31,1.1,Packages 1200+ returned,7 packages in range,Pass,,No issues,420
+TC-018,Filter Packages - Invalid Price Input,Tour_Package,Medium,QA_Engineer_2,In Progress,Development,2026-03-31,0.7,Graceful error handling,Error message displayed,Pass,,Input validation working,200
+TC-019,Filter Packages - Duration,Tour_Package,Medium,QA_Engineer_2,Not Started,Development,,,Only 5-day packages returned,,,
+TC-020,Combined Filters - Difficulty + Price,Tour_Package,High,QA_Engineer_2,Passed,Development,2026-03-30,1.5,Packages matching both criteria,3 packages found,Pass,,Complex filtering working,550
+TC-021,Package Detail - View with Reviews,Tour_Package,High,QA_Engineer_2,Passed,Development,2026-03-30,1.0,Package details with review list,5 reviews displayed,Pass,,Reviews loading correctly,420
+TC-022,Package Recommendations,Tour_Package,Medium,QA_Engineer_2,Blocked,Development,2026-04-01,0.5,Similar packages suggested,Null value returned,Fail,DEF-002,Recommendation algorithm needs testing,300
+TC-023,Sort Packages - Price Ascending,Tour_Package,Medium,QA_Engineer_2,In Progress,Development,2026-03-31,1.0,Packages sorted low-high,Sorted correctly,Pass,,Working as expected,400
+TC-024,Sort Packages - Price Descending,Tour_Package,Medium,QA_Engineer_2,Not Started,Development,,,Packages sorted high-low,,,
+TC-025,Sort Packages - By Date,Tour_Package,Low,QA_Engineer_2,Not Started,Development,,,Newest packages first,,,
+TC-026,Search by Title,Search,High,QA_Engineer_3,Passed,Development,2026-03-30,0.8,Matching packages returned,3 results found,Pass,,Title search perfect match,280
+TC-027,Search by Description,Search,High,QA_Engineer_3,Passed,Development,2026-03-30,0.9,Packages with matching description,2 results found,Pass,,Description search working,310
+TC-028,Search by Destination,Search,High,QA_Engineer_3,In Progress,Development,2026-03-31,0.8,Packages for destination,4 results for Paris,Pass,,Destination search working,320
+TC-029,Search - Empty Query,Search,Medium,QA_Engineer_3,Passed,Development,2026-03-30,0.5,Empty results or warning,No results returned,Pass,,Handled correctly,150
+TC-030,Search - No Query Parameter,Search,Medium,QA_Engineer_3,In Progress,Development,2026-03-31,0.5,Default behavior or results,All packages returned,Pass,,No issues,180
+TC-031,Search - Case Insensitivity,Search,Medium,QA_Engineer_3,Passed,Development,2026-03-30,0.7,Search works regardless case,Found with mixed case,Pass,,Case insensitive working,290
+TC-032,Search - Special Characters,Search,Low,QA_Engineer_3,In Progress,Development,2026-03-31,0.6,Special chars handled safely,No SQL injection found,Pass,,Security validated,220
+TC-033,Search Performance - 50+ Items,Search,High,QA_Engineer_3,In Progress,Development,2026-03-31,1.2,Results return < 500ms,410ms response,Pass,,Performance acceptable,410
+TC-034,Search - Partial Word Matching,Search,Medium,QA_Engineer_3,Passed,Development,2026-03-30,0.8,Partial matches found,Found similar results,Pass,,Matching algorithm good,260
+TC-035,Search - Unique Results,Search,Low,QA_Engineer_3,Passed,Development,2026-03-30,0.6,No duplicate packages,All unique results,Pass,,Deduplication working,240
+TC-036,Create Booking - Valid Data,Booking,Critical,QA_Engineer_4,Passed,Development,2026-03-30,1.2,Booking created with confirmation,302 redirect to confirmation,Pass,,All fields validated,450
+TC-037,Booking - Missing Email Field,Booking,High,QA_Engineer_4,Passed,Development,2026-03-30,0.6,Form validation error,Error message shown,Pass,,Required field validation,180
+TC-038,Booking - Invalid Email Format,Booking,High,QA_Engineer_4,Passed,Development,2026-03-30,0.7,Email validation error,Invalid format rejected,Pass,,Email validation working,200
+TC-039,Booking - Zero Participants,Booking,High,QA_Engineer_4,In Progress,Development,2026-04-01,0.5,Error: at least 1 required,Error thrown correctly,Pass,,Minimum validation,150
+TC-040,Booking - Negative Participants,Booking,High,QA_Engineer_4,In Progress,Development,2026-04-01,0.5,Error: invalid number,Error thrown correctly,Pass,,Input type validation,140
+TC-041,Booking - Exceeds Capacity,Booking,Critical,QA_Engineer_4,Failed,Development,2026-04-01,1.0,Error: max capacity 20,Allowed 25 participants,Fail,DEF-003,Capacity check not enforced,500
+TC-042,Booking - Past Date,Booking,High,QA_Engineer_4,Passed,Development,2026-03-30,0.6,Error: date in past,Past dates rejected,Pass,,Date validation working,160
+TC-043,Booking Confirmation Page,Booking,High,QA_Engineer_4,Passed,Development,2026-03-30,0.5,Confirmation page loads,Page displays reservation,Pass,,Confirmation working,280
+TC-044,Booking Confirmation - Invalid ID,Booking,Medium,QA_Engineer_4,Passed,Development,2026-03-30,0.5,404 Not Found,Correct error shown,Pass,,Error handling correct,200
+TC-045,Booking - Total Price Calculation,Booking,Critical,QA_Engineer_4,Failed,Development,2026-04-01,1.0,Total = Price × Participants,Total incorrect for 3 ppl,Fail,DEF-004,Price calculation bug,400
+TC-046,Booking Status - Pending to Confirmed,Booking,High,QA_Engineer_4,In Progress,Development,2026-04-01,0.8,Status changes to confirmed,Status updated correctly,Pass,,State transition working,300
+TC-047,Booking Status - Confirmed to Cancelled,Booking,High,QA_Engineer_4,Not Started,Development,,,Status changes to cancelled,,,
+TC-048,User Bookings List,Booking,Medium,QA_Engineer_4,Passed,Development,2026-03-30,0.7,User sees only their bookings,2 bookings displayed,Pass,,Authorization working,250
+TC-049,Booking - Special Requirements,Booking,Low,QA_Engineer_4,In Progress,Development,2026-04-01,0.6,Special requirements stored,Vegetarian meals saved,Pass,,Field handling correct,180
+TC-050,Concurrent Booking Limits,Booking,High,QA_Engineer_4,Blocked,Development,2026-04-01,1.5,Max 20 concurrent bookings,System accepted 22,Fail,DEF-005,Concurrency control missing,600
+TC-051,Review - 5 Star Rating,Reviews,High,QA_Engineer_1,Passed,Development,2026-03-30,0.6,5-star review submitted,Review saved successfully,Pass,,Rating validation working,220
+TC-052,Review - 1 Star Rating,Reviews,High,QA_Engineer_1,Passed,Development,2026-03-30,0.6,1-star review submitted,Review saved successfully,Pass,,Min rating accepted,210
+TC-053,Review - Invalid Rating 0,Reviews,High,QA_Engineer_1,Passed,Development,2026-03-30,0.5,Error: rating must be 1-5,Error shown correctly,Pass,,Validation working,150
+TC-054,Review - Invalid Rating 6,Reviews,High,QA_Engineer_1,In Progress,Development,2026-03-31,0.5,Error: rating must be 1-5,Error shown correctly,Pass,,Max validation working,160
+TC-055,Review - Empty Comment,Reviews,Medium,QA_Engineer_1,Passed,Development,2026-03-30,0.5,Error or optional field,Comment handling correct,Pass,,No issues,140
+TC-056,View Reviews for Package,Reviews,High,QA_Engineer_1,Passed,Development,2026-03-30,0.7,All reviews displayed,5 reviews shown,Pass,,Reviews loading correctly,280
+TC-057,Average Rating Calculation,Reviews,High,QA_Engineer_1,In Progress,Development,2026-03-31,0.8,Average calculated correctly,Average 4.2 stars,Pass,,Calculation working,300
+TC-058,Reviews - Chronological Order,Reviews,Medium,QA_Engineer_1,Passed,Development,2026-03-30,0.6,Newest reviews first,Newest review at top,Pass,,Sorting working,220
+TC-059,Duplicate Review Prevention,Reviews,High,QA_Engineer_1,Blocked,Development,2026-04-01,0.7,User can't review twice,Allowed duplicate review,Fail,DEF-006,Duplicate check missing,180
+TC-060,Review Moderation Status,Reviews,Low,QA_Engineer_1,Not Started,Development,,,Reviews show moderation badge,,,
+TC-061,Homepage Load Time,Performance,High,QA_Engineer_3,Passed,Development,2026-03-30,1.5,Load < 500ms,Loaded in 380ms,Pass,,Good performance,380
+TC-062,Pagination - 250 Items,Performance,High,QA_Engineer_3,In Progress,Development,2026-03-31,2.0,Page loads quickly,Loaded in 620ms,Fail,DEF-007,Pagination optimization needed,620
+TC-063,Multi-Criteria Filtering,Performance,High,QA_Engineer_3,Passed,Development,2026-03-30,1.8,Filter results < 400ms,Filtered in 350ms,Pass,,Performance acceptable,350
+TC-064,Concurrent Users - 10 Sessions,Performance,Critical,QA_Engineer_3,In Progress,Development,2026-03-31,2.5,All requests complete,Some timeouts occurred,Fail,DEF-008,Server stress at 10 concurrent,800
+TC-065,Memory Efficiency,Performance,Medium,QA_Engineer_3,Passed,Development,2026-03-30,1.5,Memory usage < 500MB,Used 450MB,Pass,,Acceptable memory usage,N/A
+TC-066,N+1 Query Prevention,Performance,High,QA_Engineer_3,In Progress,Development,2026-03-31,2.0,Single query per request,12 queries found,Fail,DEF-009,Query optimization needed,N/A
+TC-067,Connection Pooling,Performance,Medium,QA_Engineer_3,Passed,Development,2026-03-30,1.2,Connections reused properly,Pool working,Pass,,Database connections stable,N/A
+TC-068,Cache Hit Rate,Performance,High,QA_Engineer_3,In Progress,Development,2026-03-31,1.5,Cache > 80% hit rate,78% hit rate,Pass,,Close to target,N/A
+TC-069,Timeout Handling,Performance,Medium,QA_Engineer_3,Blocked,Development,2026-04-01,1.0,Timeouts handled gracefully,No timeout error messages,Fail,DEF-010,Timeout handling incorrect,N/A
+TC-070,Slow Query Handling,Performance,Low,QA_Engineer_3,Not Started,Development,,,Slow queries logged,,,
+
+SUMMARY,,,,,,,,,
+Total_Tests,93,,,
+Executed,85,,,
+Passed,75,,,
+Failed,6,,,
+Blocked,4,,,
+Pass_Rate,88%,,,
+Open_Defects,10,,,
+Fixed_Defects,0,,,
+Team_Hours,160,,,

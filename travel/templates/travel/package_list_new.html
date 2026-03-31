@@ -1,0 +1,177 @@
+{% extends 'travel/base_new.html' %}
+{% load static %}
+
+{% block title %}Tour Packages - Wanderlust{% endblock %}
+
+{% block content %}
+
+<!-- Header Section -->
+<section class="bg-gradient-to-b from-navy to-navy/80 pt-20 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl md:text-5xl font-bold font-serif text-ivory mb-4">Tour Packages</h1>
+        <p class="text-xl text-ivory/70">Handpicked packages for every type of traveler</p>
+    </div>
+</section>
+
+<!-- Search & Filter -->
+<section class="bg-ivory border-b border-gray-200 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <form method="GET" class="flex flex-col md:flex-row gap-4 items-end">
+            <div class="flex-1">
+                <label class="block text-sm font-semibold text-navy mb-2">Search Package</label>
+                <input type="text" name="q" placeholder="Search tours..." value="{{ request.GET.q }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-navy mb-2">Difficulty</label>
+                <select name="difficulty" class="px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold">
+                    <option value="">All Levels</option>
+                    <option value="easy" {% if request.GET.difficulty == 'easy' %}selected{% endif %}>Easy</option>
+                    <option value="moderate" {% if request.GET.difficulty == 'moderate' %}selected{% endif %}>Moderate</option>
+                    <option value="hard" {% if request.GET.difficulty == 'hard' %}selected{% endif %}>Hard</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-navy mb-2">Price Range</label>
+                <select name="price" class="px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold">
+                    <option value="">Any Price</option>
+                    <option value="budget" {% if request.GET.price == 'budget' %}selected{% endif %}>Budget</option>
+                    <option value="mid" {% if request.GET.price == 'mid' %}selected{% endif %}>Mid-range</option>
+                    <option value="luxury" {% if request.GET.price == 'luxury' %}selected{% endif %}>Luxury</option>
+                </select>
+            </div>
+            <button type="submit" class="px-8 py-3 bg-gold text-navy rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                <i class="fas fa-filter mr-2"></i>Filter
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Packages Grid -->
+<section class="py-16 bg-ivory">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {% if packages %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for package in packages %}
+            <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                <!-- Image with Badge -->
+                <div class="relative h-64 overflow-hidden bg-gradient-to-br from-navy to-teal">
+                    <img src="{{ package.image|default:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=400&fit=crop' }}" alt="{{ package.name }}" class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-500">
+                    
+                    <!-- Price Ribbon -->
+                    <div class="absolute top-0 right-0 bg-gradient-to-l from-gold to-gold/80 text-navy px-6 py-2 font-bold text-lg transform skew-x-[-15deg] translate-x-4 -translate-y-1 shadow-lg">
+                        <i class="fas fa-rupee-sign"></i>{{ package.price|default:"0" }}
+                    </div>
+                    
+                    <!-- Difficulty Badge -->
+                    <div class="absolute bottom-4 left-4">
+                        <span class="inline-block px-3 py-1 bg-white/90 text-navy text-xs font-semibold rounded-full">
+                            {% if package.difficulty %}
+                                {% if package.difficulty == 'easy' %}<i class="fas fa-signal"></i> Easy{% endif %}
+                                {% if package.difficulty == 'moderate' %}<i class="fas fa-signal"></i><i class="fas fa-signal"></i> Moderate{% endif %}
+                                {% if package.difficulty == 'hard' %}<i class="fas fa-signal"></i><i class="fas fa-signal"></i><i class="fas fa-signal"></i> Hard{% endif %}
+                            {% else %}Moderate{% endif %}
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-6 flex-1 flex flex-col">
+                    <h3 class="text-2xl font-bold font-serif text-navy mb-2">{{ package.name }}</h3>
+                    
+                    <!-- Duration & Details -->
+                    <div class="flex justify-between text-sm text-gray-600 mb-4 pb-4 border-b border-gray-200">
+                        <span><i class="fas fa-calendar text-gold mr-2"></i>{{ package.duration|default:"5" }} Days</span>
+                        <span><i class="fas fa-users text-teal mr-2"></i>Group</span>
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="text-gray-600 text-sm mb-4 flex-1">{{ package.description|default:"Experience the best this destination has to offer with our expertly curated itinerary." }}</p>
+                    
+                    <!-- Highlights -->
+                    <ul class="space-y-2 mb-4 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-teal mr-2"></i>Expert guides included</li>
+                        <li><i class="fas fa-check text-teal mr-2"></i>Accommodation & meals</li>
+                        <li><i class="fas fa-check text-teal mr-2"></i>Airport transfers</li>
+                    </ul>
+                    
+                    <!-- Rating -->
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-4">
+                        <div class="flex space-x-1">
+                            {% for i in "12345" %}<i class="fas fa-star text-gold text-sm"></i>{% endfor %}
+                        </div>
+                        <span class="text-gray-600 font-semibold">{{ package.rating|default:"4.8" }}/5</span>
+                    </div>
+                    
+                    <!-- CTA -->
+                    <a href="{% url 'travel:package_detail' package.id %}" class="w-full block text-center bg-gradient-to-r from-teal to-teal/80 text-white px-4 py-3 rounded-lg font-bold hover:from-teal hover:to-teal transition-all duration-300 shadow-md">
+                        <i class="fas fa-arrow-right mr-2"></i> Book Now
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj %}
+        <nav class="mt-12 flex justify-center items-center space-x-2">
+            {% if page_obj.has_previous %}
+            <a href="?page=1" class="px-4 py-2 rounded-lg border border-gray-300 text-navy hover:bg-gold hover:border-gold transition-all">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-lg border border-gray-300 text-navy hover:bg-gold hover:border-gold transition-all">
+                Previous
+            </a>
+            {% endif %}
+            
+            <span class="text-navy font-semibold mx-4">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-lg border border-gray-300 text-navy hover:bg-gold hover:border-gold transition-all">
+                Next
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-4 py-2 rounded-lg border border-gray-300 text-navy hover:bg-gold hover:border-gold transition-all">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-16">
+            <i class="fas fa-inbox text-6xl text-gray-300 mb-4 block"></i>
+            <h3 class="text-2xl font-bold text-gray-600 mb-2">No packages found</h3>
+            <p class="text-gray-500 mb-6">Try adjusting your search criteria</p>
+            <a href="{% url 'travel:package_list' %}" class="inline-flex items-center px-6 py-3 bg-gold text-navy rounded-lg font-semibold hover:bg-opacity-90">
+                View All Packages <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Trust Section -->
+<section class="bg-navy text-ivory py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <h3 class="text-4xl font-bold font-serif text-gold mb-2">50K+</h3>
+                <p class="text-ivory/70">Happy Travelers</p>
+            </div>
+            <div>
+                <h3 class="text-4xl font-bold font-serif text-gold mb-2">500+</h3>
+                <p class="text-ivory/70">Package Options</p>
+            </div>
+            <div>
+                <h3 class="text-4xl font-bold font-serif text-gold mb-2">150+</h3>
+                <p class="text-ivory/70">Destinations</p>
+            </div>
+            <div>
+                <h3 class="text-4xl font-bold font-serif text-gold mb-2">4.9★</h3>
+                <p class="text-ivory/70">Average Rating</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

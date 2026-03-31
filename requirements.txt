@@ -1,0 +1,52 @@
+# Django Framework
+Django==5.2
+django-extensions==3.2.3
+
+# Database
+psycopg2-binary==2.9.9  # PostgreSQL adapter (production)
+
+# Web Server
+gunicorn==21.2.0  # Production WSGI server
+whitenoise==6.6.0  # Static file serving
+
+# Caching
+redis==5.0.1
+django-redis==5.4.0
+
+# Security & Environment
+python-decouple==3.8
+cryptography==41.0.7
+
+# API & Forms
+djangorestframework==3.14.0  # Optional: for REST API support
+django-cors-headers==4.3.1  # CORS handling
+google-generativeai>=0.3.0  # Google Gemini AI API for chatbot
+
+# Image Processing
+Pillow==10.1.0
+
+# Monitoring & Logging
+sentry-sdk==1.40.1  # Error tracking (optional)
+django-debug-toolbar==4.2.0  # Development only
+
+# Testing
+pytest==7.4.3
+pytest-django==4.7.0
+pytest-cov==4.1.0
+factory-boy==3.3.0  # Test data generation
+
+# Code Quality
+flake8==6.1.0
+black==23.12.1
+isort==5.13.2
+pylint==3.0.3
+
+# Deployment & DevOps
+python-dotenv==1.0.0
+dj-database-url==2.1.0  # Parse DATABASE_URL
+
+# API Documentation (Optional)
+drf-spectacular==0.26.5
+
+# Production Email
+django-anymail==10.2  # Email service abstraction

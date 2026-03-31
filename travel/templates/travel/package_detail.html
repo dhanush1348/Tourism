@@ -1,0 +1,95 @@
+{% extends 'travel/base.html' %}
+
+{% block title %}{{ package.title }} - Tours & Travel{% endblock %}
+
+{% block content %}
+<div class="hero-section" style="background-image: url('{{ package.image.url }}');">
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="display-4 fw-bold">{{ package.title }}</h1>
+                <p class="lead">
+                    <i class="fas fa-map-marker-alt"></i> {{ package.destination.name }} |
+                    <i class="fas fa-clock"></i> {{ package.duration }} days |
+                    <span class="badge bg-{{ package.difficulty|lower }}">{{ package.difficulty|title }}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Tour Overview</h2>
+                    <p class="lead">{{ package.description }}</p>
+                    
+                    <h4 class="mt-4">Included Services</h4>
+                    <p>{{ package.included_services }}</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Reviews</h2>
+                    {% for review in reviews %}
+                    <div class="border-bottom mb-3 pb-3">
+                        <div class="d-flex justify-content-between">
+                            <h5>{{ review.user_name }}</h5>
+                            <div>
+                                {% for i in "12345"|make_list %}
+                                <i class="fas fa-star {% if forloop.counter <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="text-muted"><small>{{ review.created_at|date:"F d, Y" }}</small></p>
+                        <p>{{ review.comment }}</p>
+                    </div>
+                    {% empty %}
+                    <p>No reviews yet. Be the first to review this package!</p>
+                    {% endfor %}
+
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        <h4>Write a Review</h4>
+                        {{ review_form.as_p }}
+                        <button type="submit" name="review_submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Book This Tour</h3>
+                    <div class="text-center mb-4">
+                        <h2 class="text-primary">${{ package.price }}</h2>
+                        <p class="text-muted">per person</p>
+                    </div>
+                    
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="fas fa-users me-2"></i> Max {{ package.max_participants }} participants</li>
+                        <li class="mb-2"><i class="fas fa-calendar-alt me-2"></i> {{ package.duration }} days</li>
+                        <li class="mb-2"><i class="fas fa-mountain me-2"></i> {{ package.difficulty|title }} difficulty</li>
+                    </ul>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ booking_form.as_p }}
+                        <button type="submit" name="booking_submit" class="btn btn-primary w-100">Book Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-easy { background-color: #28a745; }
+.bg-moderate { background-color: #ffc107; }
+.bg-challenging { background-color: #dc3545; }
+</style>
+{% endblock %}

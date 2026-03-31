@@ -1,0 +1,107 @@
+{% extends 'travel/base.html' %}
+
+{% block title %}Explore Destinations - Wanderlust{% endblock %}
+
+{% block content %}
+<!-- Destinations Header -->
+<section class="hero text-center">
+    <div class="container">
+        <h1 class="fade-in">Explore Amazing Destinations</h1>
+        <p class="fade-in">Discover beautiful places and start planning your next adventure</p>
+    </div>
+</section>
+
+<!-- Destinations Grid -->
+<section class="container my-5">
+    <div class="row">
+        {% for destination in destinations %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 fade-in">
+                {% if destination.image %}
+                <img src="{{ destination.image.url }}" class="card-img-top" alt="{{ destination.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ destination.name }}</h5>
+                        <span class="badge bg-primary">
+                            <i class="fas fa-map-marker-alt me-1"></i>{{ destination.location }}
+                        </span>
+                    </div>
+                    <p class="card-text">{{ destination.description|truncatewords:30 }}</p>
+                    
+                    <!-- Available Packages -->
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-2">
+                            <i class="fas fa-suitcase me-1"></i>Available Tour Packages:
+                        </small>
+                        {% for package in destination.tourpackage_set.all|slice:":3" %}
+                        <span class="badge bg-light text-dark me-2 mb-1">{{ package.title }}</span>
+                        {% endfor %}
+                        {% if destination.tourpackage_set.count > 3 %}
+                        <span class="badge bg-light text-dark">+{{ destination.tourpackage_set.count|add:"-3" }} more</span>
+                        {% endif %}
+                    </div>
+
+                    <a href="{% url 'travel:destination_detail' destination.pk %}" class="btn btn-primary w-100">
+                        Explore Destination
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <div class="alert alert-info fade-in" role="alert">
+                <i class="fas fa-info-circle me-2"></i>No destinations available at the moment.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</section>
+
+<!-- Newsletter Section -->
+<section class="container mb-5">
+    <div class="p-5 bg-white rounded-3 shadow-sm text-center fade-in">
+        <h3>Stay Updated with New Destinations</h3>
+        <p class="text-muted mb-4">Subscribe to our newsletter and be the first to know about new destinations and exclusive offers.</p>
+        <form class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="email" class="form-control" placeholder="Enter your email address">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-paper-plane me-2"></i>Subscribe
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

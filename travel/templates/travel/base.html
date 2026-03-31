@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="{% block meta_description %}Discover unforgettable travel experiences with Wanderlust. Book amazing tour packages and create memories worldwide.{% endblock %}">
+    <meta name="keywords" content="travel, tours, vacations, destinations, adventure, booking">
+    <meta name="author" content="Wanderlust Travel">
+    <meta name="theme-color" content="#0A0F2C">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    
+    <!-- Open Graph Meta Tags (Social Media) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}Wanderlust - Your Ultimate Travel Companion{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover and book amazing tour packages to destinations worldwide. Create unforgettable travel memories.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'travel/images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}https://www.wanderlust.com{% endblock %}">
+    <meta property="og:site_name" content="Wanderlust">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Wanderlust - Your Ultimate Travel Companion{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Discover and book amazing tour packages. Create unforgettable travel memories.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'travel/images/og-image.jpg' %}{% endblock %}">
+    
+    <!-- Canonical URL for SEO -->
+    <link rel="canonical" href="{% block canonical %}https://www.wanderlust.com{% endblock %}">
+    
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'travel/images/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static 'travel/images/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'travel/manifest.json' %}">
+    
+    <title>{% block title %}Tours & Travel | Wanderlust{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'travel/css/style.css' %}">
+    
+    <!-- Preconnect for better performance -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'travel:home' %}">
+                <i class="fas fa-globe-americas"></i> Wanderlust
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'travel:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'travel:destination_list' %}">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'travel:package_list' %}">Tour Packages</a>
+                    </li>
+                </ul>
+                <form class="d-flex" action="{% url 'travel:search_packages' %}" method="GET">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search tours...">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Wanderlust</h5>
+                    <p>We provide unforgettable travel experiences to destinations worldwide. Let us help you create memories that last a lifetime.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'travel:home' %}">Home</a></li>
+                        <li><a href="{% url 'travel:destination_list' %}">Destinations</a></li>
+                        <li><a href="{% url 'travel:package_list' %}">Tour Packages</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone me-2"></i> +1 234 567 890</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@wanderlust.com</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Travel Street, Adventure City</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 Wanderlust. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

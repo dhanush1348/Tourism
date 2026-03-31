@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Available Tour Packages</title>
+</head>
+<body>
+    <h1>Available Tour Packages</h1>
+
+    {% if packages %}
+        <ul>
+            {% for package in packages %}
+                <li>
+                    <strong>{{ package.name }}</strong><br>
+                    {{ package.description }}<br>
+                    Price: ${{ package.price }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tour packages available at the moment.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>
