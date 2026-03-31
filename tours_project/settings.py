@@ -8,6 +8,7 @@ Configuration is controlled via environment variables.
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load environment variables from .env file
 load_dotenv(Path(__file__).resolve().parent.parent / '.env')
@@ -40,8 +41,16 @@ if IS_PRODUCTION:
     DEBUG = False
 
 # Allowed hosts from environment
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+default_hosts = 'localhost,127.0.0.1,.pythonanywhere.com' if IS_PRODUCTION else 'localhost,127.0.0.1'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default_hosts).split(',')
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
+
+# CSRF trusted origins for HTTPS deployments behind reverse proxy (e.g. PythonAnywhere)
+default_csrf_origins = 'https://*.pythonanywhere.com' if IS_PRODUCTION else ''
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip() for origin in os.getenv('CSRF_TRUSTED_ORIGINS', default_csrf_origins).split(',')
+    if origin.strip()
+]
 
 # Google Gemini API Key for chatbot
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', 'your-key-here')
@@ -95,18 +104,19 @@ WSGI_APPLICATION = 'tours_project.wsgi.application'
 
 # Support both SQLite (development) and PostgreSQL (production)
 if IS_PRODUCTION:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', 'tours_db'),
-            'USER': os.getenv('DB_USER', 'postgres'),
-            'PASSWORD': os.getenv('DB_PASSWORD', ''),
-            'HOST': os.getenv('DB_HOST', 'localhost'),
-            'PORT': os.getenv('DB_PORT', '5432'),
-            'CONN_MAX_AGE': 600,
-            'ATOMIC_REQUESTS': True,
+    database_url = os.getenv('DATABASE_URL', '').strip()
+    if database_url:
+        DATABASES = {
+            'default': dj_database_url.parse(database_url, conn_max_age=600)
         }
-    }
+        DATABASES['default']['ATOMIC_REQUESTS'] = True
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 else:
     DATABASES = {
         'default': {
@@ -159,6 +169,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if IS_PRODUCTION:
     # HTTPS
     SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     
@@ -168,7 +180,8 @@ if IS_PRODUCTION:
     SECURE_HSTS_PRELOAD = True
     
     # Other security settings
-    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
     SECURE_CONTENT_SECURITY_POLICY = {
         'default-src': ("'self'",),
         'script-src': ("'self'", "'unsafe-inline'"),
@@ -262,13 +275,22 @@ if IS_PRODUCTION:
 # ============================================================================
 
 if IS_PRODUCTION:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1'),
-            'TIMEOUT': 300,
+    redis_url = os.getenv('REDIS_URL', '').strip()
+    if redis_url:
+        CACHES = {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+                'LOCATION': redis_url,
+                'TIMEOUT': 300,
+            }
         }
-    }
+    else:
+        CACHES = {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                'LOCATION': 'tours-cache-prod',
+            }
+        }
 else:
     CACHES = {
         'default': {

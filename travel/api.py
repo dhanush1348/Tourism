@@ -14,13 +14,16 @@ from django.views.decorators.http import require_http_methods
 from django.core.mail import send_mail
 from django.conf import settings
 
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 
 logger = logging.getLogger(__name__)
 
 # Initialize Google Gemini client
 try:
-    if settings.GOOGLE_API_KEY and settings.GOOGLE_API_KEY != 'your-key-here':
+    if genai and settings.GOOGLE_API_KEY and settings.GOOGLE_API_KEY != 'your-key-here':
         genai.configure(api_key=settings.GOOGLE_API_KEY)
         GEMINI_AVAILABLE = True
     else:
